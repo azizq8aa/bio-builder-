@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - صانع الملفات التعريفية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- ======================= لوحة التحكم ======================= -->
+        <div class="control-panel">
+            <header class="panel-header">
+                <h2><i class="fas fa-paint-brush"></i> لوحة التحكم</h2>
+                <button id="logout-btn" class="logout-btn">تسجيل الخروج</button>
+            </header>
+
+            <div class="control-section">
+                <label>رابط ملفك التعريفي:</label>
+                <div class="profile-link-container">
+                    <input type="text" id="profileLink" readonly>
+                    <button id="copyLinkBtn"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <label for="profileName">الاسم الظاهر</label>
+                <input type="text" id="profileName" placeholder="مثال: عبدالعزيز العنزي">
+            </div>
+
+            <div class="control-section">
+                <label for="profileBio">نبذة تعريفية</label>
+                <textarea id="profileBio" rows="2" placeholder="مثال: مهتم بالتقنية وتطوير الويب"></textarea>
+            </div>
+
+            <div class="control-section">
+                <label>الصورة الشخصية</label>
+                <div class="avatar-upload">
+                    <img src="https://i.ibb.co/pzp61h2/khaleeji-avatar.png" id="avatarPreview" class="avatar-preview">
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                    <button onclick="document.getElementById('avatarUpload').click()">تغيير الصورة</button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <label>روابط التواصل الاجتماعي</label>
+                <div id="socialLinksContainer"></div>
+                <button id="addLinkBtn" class="add-btn"><i class="fas fa-plus"></i> إضافة رابط جديد</button>
+            </div>
+
+            <div class="control-section">
+                <label>اختر خلفية جاهزة</label>
+                <div class="background-selector">
+                    <img src="https://i.ibb.co/3kC7qgM/bg1.jpg" class="bg-thumb" data-bg="url(https://i.ibb.co/3kC7qgM/bg1.jpg)" alt="خلفية 1">
+                    <img src="https://i.ibb.co/qY8Y9Sg/bg2.jpg" class="bg-thumb" data-bg="url(https://i.ibb.co/qY8Y9Sg/bg2.jpg)" alt="خلفية 2">
+                    <img src="https://i.ibb.co/z50C5C9/bg3.jpg" class="bg-thumb" data-bg="url(https://i.ibb.co/z50C5C9/bg3.jpg)" alt="خلفية 3">
+                    <img src="https://i.ibb.co/Y0p5d5G/bg4.jpg" class="bg-thumb" data-bg="url(https://i.ibb.co/Y0p5d5G/bg4.jpg)" alt="خلفية 4">
+                </div>
+                 <label for="bgUpload" class="upload-label" onclick="document.getElementById('bgUpload').click()">أو ارفع خلفية خاصة</label>
+                 <input type="file" id="bgUpload" accept="image/*" style="display:none">
+            </div>
+            
+            <button id="save-btn" class="save-btn"><i class="fas fa-save"></i> حفظ التغييرات</button>
+            <p id="save-status" class="save-status"></p>
+
+            <footer class="panel-footer">
+                <p>صُنِع بواسطة Manus & Aziz © 2025</p>
+            </footer>
+        </div>
+
+        <!-- ======================= المعاينة الحية ======================= -->
+        <div class="live-preview">
+            <div class="mobile-frame">
+                <div class="mobile-screen" id="mobileScreen">
+                    <div class="profile-preview-container">
+                        <img src="https://i.ibb.co/pzp61h2/khaleeji-avatar.png" alt="أفتار" class="preview-avatar" id="previewAvatar">
+                        <h1 class="preview-name" id="previewName">اسمك هنا</h1>
+                        <p class="preview-bio" id="previewBio">نبذة تعريفية قصيرة.</p>
+                        <div class="preview-links" id="previewLinks"></div>
+                        <div class="preview-footer"><p>MyBio ✨</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
