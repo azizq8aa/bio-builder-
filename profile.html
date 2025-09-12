@@ -315,7 +315,7 @@
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -329,7 +329,7 @@
         };
 
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const database = firebase.database();
 
         // Social media platforms
         const socialPlatforms = {
@@ -370,14 +370,15 @@
             }
             
             try {
-                const profileDoc = await db.collection('profiles').doc(username).get();
+                const profileRef = database.ref('profiles/' + username);
+                const snapshot = await profileRef.once('value');
                 
-                if (!profileDoc.exists) {
+                if (!snapshot.exists()) {
                     showError();
                     return;
                 }
                 
-                const profileData = profileDoc.data();
+                const profileData = snapshot.val();
                 displayProfile(profileData);
                 
             } catch (error) {
@@ -425,12 +426,12 @@
             const container = document.getElementById('social-links');
             container.innerHTML = '';
             
-            socialLinks.filter(link => link.url).forEach(link => {
+            socialLinks.filter(link => link.url && link.url.trim() !== '').forEach(link => {
                 const platform = socialPlatforms[link.platform];
                 if (platform) {
                     const linkElement = document.createElement('a');
                     linkElement.className = 'social-link';
-                    linkElement.href = link.url;
+                    linkElement.href = link.url.startsWith('http') ? link.url : 'https://' + link.url;
                     linkElement.target = '_blank';
                     linkElement.rel = 'noopener noreferrer';
                     linkElement.innerHTML = `
