@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q8 Bio - لوحة التحكم</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Q8 Bio - منشئ الملفات التعريفية</title>
     <style>
         * {
             margin: 0;
@@ -16,514 +15,249 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            direction: rtl;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            align-items: start;
-        }
-
-        .control-panel {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .preview-panel {
-            position: sticky;
-            top: 20px;
-        }
-
-        .header {
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            margin-bottom: 30px;
         }
 
-        .header h1 {
-            color: #2c3e50;
-            font-size: 28px;
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
             margin-bottom: 10px;
         }
 
-        .logout-btn {
-            background: #e74c3c;
-            color: white;
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
             border: none;
-            padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
         }
 
-        .section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ecf0f1;
+        .tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section h3 {
-            color: #34495e;
-            margin-bottom: 15px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .input-group {
+        .form-group {
             margin-bottom: 20px;
+            text-align: right;
         }
 
-        .input-group label {
+        .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #34495e;
+            color: #333;
         }
 
-        .input-group input,
-        .input-group textarea {
+        .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
             transition: all 0.3s ease;
+            background: white;
         }
 
-        .input-group input:focus,
-        .input-group textarea:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .file-input {
-            display: none;
-        }
-
-        .file-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #3498db;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .file-btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-
-        .color-picker {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .color-option {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .color-option.selected {
-            border-color: #2c3e50;
-            transform: scale(1.1);
-        }
-
-        .color-option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-        }
-
-        .social-links {
-            margin-top: 15px;
-        }
-
-        .social-link {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-
-        .social-link select {
-            flex: 0 0 120px;
-            padding: 8px;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-        }
-
-        .social-link input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-        }
-
-        .remove-link {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .add-link-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
+        .btn {
             width: 100%;
-            margin-top: 10px;
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .copy-btn {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .phone-preview {
-            width: 300px;
-            height: 600px;
-            background: #000;
-            border-radius: 30px;
-            padding: 10px;
-            margin: 0 auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .phone-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-        }
-
-        .phone-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: -1;
-        }
-
-        .preview-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
             margin-bottom: 15px;
-            background: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #666;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            overflow: hidden;
         }
 
-        .preview-name {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
-        .preview-bio {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-bottom: 20px;
-            line-height: 1.4;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .preview-social {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            max-width: 200px;
-        }
-
-        .preview-social-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 15px;
+        .forgot-password {
+            color: #667eea;
             text-decoration: none;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .preview-social-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-        }
-
-        .preview-social-icon.instagram { background: #E4405F; }
-        .preview-social-icon.twitter { background: #1DA1F2; }
-        .preview-social-icon.facebook { background: #1877F2; }
-        .preview-social-icon.linkedin { background: #0A66C2; }
-        .preview-social-icon.youtube { background: #FF0000; }
-        .preview-social-icon.tiktok { background: #000000; }
-        .preview-social-icon.snapchat { background: #FFFC00; color: #000; }
-        .preview-social-icon.whatsapp { background: #25D366; }
-        .preview-social-icon.telegram { background: #0088CC; }
-        .preview-social-icon.website { background: #667eea; }
-
-        .preview-brand {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 10px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .profile-url {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 12px;
-            font-family: monospace;
             font-size: 14px;
-            color: #495057;
-            margin-bottom: 10px;
+            margin-top: 15px;
+            display: inline-block;
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
+        .forgot-password:hover {
+            text-decoration: underline;
         }
 
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
+            background: #fee;
+            color: #c33;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 20px;
+            font-size: 14px;
             display: none;
         }
 
-        @media (max-width: 768px) {
+        .success-message {
+            background: #efe;
+            color: #363;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .username-validation {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .username-validation.error {
+            color: #c33;
+        }
+
+        .username-validation.success {
+            color: #363;
+        }
+
+        @media (max-width: 480px) {
             .container {
-                grid-template-columns: 1fr;
-                gap: 20px;
+                padding: 30px 20px;
+                margin: 10px;
             }
             
-            .phone-preview {
-                width: 250px;
-                height: 500px;
-            }
-            
-            .preview-panel {
-                position: static;
+            .logo {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="control-panel">
-            <div class="header">
-                <h1><i class="fas fa-cog"></i> لوحة التحكم</h1>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-                </button>
-            </div>
-
-            <div class="success-message" id="success-message"></div>
-            <div class="error-message" id="error-message"></div>
-
-            <div class="section">
-                <h3><i class="fas fa-user"></i> المعلومات الشخصية</h3>
-                <div class="input-group">
-                    <label>الاسم</label>
-                    <input type="text" id="name" placeholder="أدخل اسمك">
-                </div>
-                <div class="input-group">
-                    <label>النبذة التعريفية</label>
-                    <textarea id="bio" rows="3" placeholder="اكتب نبذة قصيرة عنك"></textarea>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-image"></i> الصورة الشخصية والخلفية</h3>
-                <div class="input-group">
-                    <label>الصورة الشخصية</label>
-                    <button class="file-btn" onclick="document.getElementById('avatar-input').click()">
-                        <i class="fas fa-user"></i> اختيار صورة
-                    </button>
-                    <input type="file" id="avatar-input" class="file-input" accept="image/*">
-                </div>
-                
-                <div class="input-group">
-                    <label>اختيار لون الخلفية</label>
-                    <div class="color-picker">
-                        <div class="color-option" style="background: linear-gradient(135deg, #00c6ff, #0072ff);" data-color="#00c6ff"></div>
-                        <div class="color-option selected" style="background: linear-gradient(135deg, #667eea, #764ba2);" data-color="#667eea"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #f093fb, #f5576c);" data-color="#f093fb"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #4facfe, #00f2fe);" data-color="#4facfe"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #43e97b, #38f9d7);" data-color="#43e97b"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #fa709a, #fee140);" data-color="#fa709a"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #30cfd0, #91a7ff);" data-color="#30cfd0"></div>
-                        <div class="color-option" style="background: linear-gradient(135deg, #a8edea, #fed6e3);" data-color="#a8edea"></div>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label>أو اختيار خلفية مخصصة</label>
-                    <button class="file-btn" onclick="document.getElementById('background-input').click()">
-                        <i class="fas fa-image"></i> رفع خلفية
-                    </button>
-                    <input type="file" id="background-input" class="file-input" accept="image/*">
-                </div>
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-link"></i> روابط التواصل الاجتماعي</h3>
-                <div class="social-links" id="social-links"></div>
-                <button class="add-link-btn" onclick="addSocialLink()">
-                    <i class="fas fa-plus"></i> إضافة رابط جديد
-                </button>
-            </div>
-
-            <div class="section">
-                <h3><i class="fas fa-share"></i> رابط ملفك التعريفي</h3>
-                <div class="profile-url" id="profile-url">https://q8.bio/username</div>
-                <button class="copy-btn" onclick="copyProfileUrl()">
-                    <i class="fas fa-copy"></i> نسخ الرابط
-                </button>
-                <button class="save-btn" onclick="saveProfile()">
-                    <i class="fas fa-save"></i> حفظ البيانات
-                </button>
-            </div>
+        <div class="logo">Q8 Bio</div>
+        <div class="subtitle">منشئ الملفات التعريفية الذكي</div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('signin')">تسجيل الدخول</button>
+            <button class="tab" onclick="switchTab('signup')">إنشاء حساب</button>
         </div>
 
-        <div class="preview-panel">
-            <h3 style="text-align: center; color: white; margin-bottom: 20px;">
-                <i class="fas fa-eye"></i> معاينة مباشرة
-            </h3>
-            <div class="phone-preview">
-                <div class="phone-screen" id="phone-screen">
-                    <div class="phone-content">
-                        <div class="preview-avatar" id="preview-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="preview-name" id="preview-name">اسمك هنا</div>
-                        <div class="preview-bio" id="preview-bio">نبذة تعريفية قصيرة عنك</div>
-                        <div class="preview-social" id="preview-social"></div>
-                        <div class="preview-brand">تم إنشاؤه بواسطة Q8 Bio</div>
-                    </div>
-                </div>
-            </div>
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>جاري المعالجة...</p>
         </div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="signin-form">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="signin-email" required>
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="signin-password" required>
+            </div>
+            <button type="submit" class="btn">تسجيل الدخول</button>
+            <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+        </form>
+
+        <!-- نموذج إنشاء الحساب -->
+        <form id="signup-form" style="display: none;">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="signup-email" required>
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="signup-password" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="signup-username" required pattern="[a-zA-Z0-9_]{3,20}" 
+                       placeholder="أحرف وأرقام فقط (3-20 حرف)">
+                <div class="username-validation" id="username-validation"></div>
+            </div>
+            <button type="submit" class="btn">إنشاء الحساب</button>
+        </form>
     </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-
+    
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
@@ -538,108 +272,36 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        const storage = firebase.storage();
 
-        let currentUser = null;
-        let currentUsername = null;
-        let socialLinks = [];
-
-        // Social media platforms
-        const socialPlatforms = {
-            instagram: { name: 'Instagram', icon: 'fab fa-instagram' },
-            twitter: { name: 'Twitter', icon: 'fab fa-twitter' },
-            facebook: { name: 'Facebook', icon: 'fab fa-facebook' },
-            linkedin: { name: 'LinkedIn', icon: 'fab fa-linkedin' },
-            youtube: { name: 'YouTube', icon: 'fab fa-youtube' },
-            tiktok: { name: 'TikTok', icon: 'fab fa-tiktok' },
-            snapchat: { name: 'Snapchat', icon: 'fab fa-snapchat' },
-            whatsapp: { name: 'WhatsApp', icon: 'fab fa-whatsapp' },
-            telegram: { name: 'Telegram', icon: 'fab fa-telegram' },
-            website: { name: 'موقع ويب', icon: 'fas fa-globe' }
-        };
-
-        // Check authentication
-        auth.onAuthStateChanged(async (user) => {
+        // التحقق من حالة المصادقة
+        auth.onAuthStateChanged((user) => {
             if (user) {
-                currentUser = user;
-                await loadUserData();
-            } else {
-                window.location.href = 'index.html';
+                window.location.href = 'dashboard.html';
             }
         });
 
-        // Load user data
-        async function loadUserData() {
-            try {
-                // Find username by UID
-                const usersQuery = await db.collection('users').where('uid', '==', currentUser.uid).get();
-                
-                if (usersQuery.empty) {
-                    showError('لم يتم العثور على بيانات المستخدم');
-                    return;
-                }
-
-                const userData = usersQuery.docs[0].data();
-                currentUsername = userData.username;
-                
-                // Update profile URL
-                updateProfileUrl();
-                
-                // Load profile data
-                const profileDoc = await db.collection('profiles').doc(currentUsername).get();
-                
-                if (profileDoc.exists) {
-                    const profileData = profileDoc.data();
-                    populateForm(profileData);
-                    updatePreview();
-                }
-                
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                showError('حدث خطأ في تحميل البيانات');
-            }
-        }
-
-        // Populate form with data
-        function populateForm(data) {
-            document.getElementById('name').value = data.name || '';
-            document.getElementById('bio').value = data.bio || '';
+        // تبديل التبويبات
+        function switchTab(tab) {
+            const signinForm = document.getElementById('signin-form');
+            const signupForm = document.getElementById('signup-form');
+            const tabs = document.querySelectorAll('.tab');
             
-            // Set background
-            if (data.backgroundImage) {
-                updateBackgroundImage(data.backgroundImage);
-            } else if (data.backgroundColor) {
-                updateBackgroundColor(data.backgroundColor);
-                selectColorOption(data.backgroundColor);
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'signin') {
+                signinForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                signinForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                tabs[1].classList.add('active');
             }
             
-            // Set avatar
-            if (data.avatar) {
-                updateAvatar(data.avatar);
-            }
-            
-            // Set social links
-            socialLinks = data.socialLinks || [];
-            renderSocialLinks();
+            clearMessages();
         }
 
-        // Update profile URL
-        function updateProfileUrl() {
-            const profileUrl = `https://q8.bio/${currentUsername}`;
-            document.getElementById('profile-url').textContent = profileUrl;
-        }
-
-        // Show messages
-        function showSuccess(message) {
-            const successDiv = document.getElementById('success-message');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            document.getElementById('error-message').style.display = 'none';
-            setTimeout(() => {
-                successDiv.style.display = 'none';
-            }, 3000);
-        }
-
+        // إظهار الرسائل
         function showError(message) {
             const errorDiv = document.getElementById('error-message');
             errorDiv.textContent = message;
@@ -647,271 +309,200 @@
             document.getElementById('success-message').style.display = 'none';
         }
 
-        // Update preview
-        function updatePreview() {
-            const name = document.getElementById('name').value || 'اسمك هنا';
-            const bio = document.getElementById('bio').value || 'نبذة تعريفية قصيرة عنك';
-            
-            document.getElementById('preview-name').textContent = name;
-            document.getElementById('preview-bio').textContent = bio;
-            
-            renderPreviewSocialLinks();
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
         }
 
-        // Color selection
-        document.querySelectorAll('.color-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const color = this.dataset.color;
-                updateBackgroundColor(color);
-                selectColorOption(color);
-            });
+        function clearMessages() {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // التحقق من اسم المستخدم
+        async function checkUsername(username) {
+            const validation = document.getElementById('username-validation');
+            
+            if (!username || username.length < 3) {
+                validation.textContent = 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+                validation.className = 'username-validation error';
+                return false;
+            }
+
+            if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+                validation.textContent = 'اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط';
+                validation.className = 'username-validation error';
+                return false;
+            }
+
+            try {
+                // التحقق من users collection
+                const userDoc = await db.collection('users').doc(username).get();
+                if (userDoc.exists) {
+                    validation.textContent = 'اسم المستخدم مستخدم بالفعل';
+                    validation.className = 'username-validation error';
+                    return false;
+                }
+
+                // التحقق من profiles collection
+                const profileDoc = await db.collection('profiles').doc(username).get();
+                if (profileDoc.exists) {
+                    validation.textContent = 'اسم المستخدم مستخدم بالفعل';
+                    validation.className = 'username-validation error';
+                    return false;
+                }
+
+                validation.textContent = 'اسم المستخدم متاح ✓';
+                validation.className = 'username-validation success';
+                return true;
+            } catch (error) {
+                validation.textContent = 'خطأ في التحقق من اسم المستخدم';
+                validation.className = 'username-validation error';
+                return false;
+            }
+        }
+
+        // التحقق من اسم المستخدم عند الكتابة
+        document.getElementById('signup-username').addEventListener('input', async (e) => {
+            const username = e.target.value.trim();
+            if (username.length >= 3) {
+                await checkUsername(username);
+            }
         });
 
-        function selectColorOption(color) {
-            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelector(`[data-color="${color}"]`)?.classList.add('selected');
-        }
-
-        function updateBackgroundColor(color) {
-            const phoneScreen = document.getElementById('phone-screen');
-            phoneScreen.style.background = `linear-gradient(135deg, ${color}, ${adjustColor(color, -20)})`;
-            phoneScreen.style.backgroundImage = 'none';
-        }
-
-        function updateBackgroundImage(imageUrl) {
-            const phoneScreen = document.getElementById('phone-screen');
-            phoneScreen.style.backgroundImage = `url("${imageUrl}")`;
-            phoneScreen.style.backgroundSize = 'cover';
-            phoneScreen.style.backgroundPosition = 'center';
-            phoneScreen.style.backgroundRepeat = 'no-repeat';
-        }
-
-        function updateAvatar(imageUrl) {
-            const previewAvatar = document.getElementById('preview-avatar');
-            previewAvatar.style.backgroundImage = `url("${imageUrl}")`;
-            previewAvatar.style.backgroundSize = 'cover';
-            previewAvatar.style.backgroundPosition = 'center';
-            previewAvatar.innerHTML = '';
-        }
-
-        // File uploads
-        document.getElementById('avatar-input').addEventListener('change', handleAvatarUpload);
-        document.getElementById('background-input').addEventListener('change', handleBackgroundUpload);
-
-        async function handleAvatarUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // تسجيل الدخول
+        document.getElementById('signin-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            if (!file.type.startsWith('image/')) {
-                showError('يرجى اختيار ملف صورة صحيح');
-                return;
-            }
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
             
-            if (file.size > 5 * 1024 * 1024) {
-                showError('حجم الصورة يجب أن يكون أقل من 5 ميجابايت');
-                return;
-            }
+            showLoading(true);
+            clearMessages();
             
             try {
-                const fileName = `avatars/${currentUser.uid}_${Date.now()}.${file.name.split('.').pop()}`;
-                const uploadTask = storage.ref(fileName).put(file);
-                
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // Progress
-                    },
-                    (error) => {
-                        showError('حدث خطأ في رفع الصورة');
-                    },
-                    async () => {
-                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                        updateAvatar(downloadURL);
-                        showSuccess('تم رفع الصورة بنجاح');
-                    }
-                );
+                await auth.signInWithEmailAndPassword(email, password);
+                showSuccess('تم تسجيل الدخول بنجاح!');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
             } catch (error) {
-                showError('حدث خطأ في رفع الصورة');
-            }
-        }
-
-        async function handleBackgroundUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (!file.type.startsWith('image/')) {
-                showError('يرجى اختيار ملف صورة صحيح');
-                return;
-            }
-            
-            if (file.size > 5 * 1024 * 1024) {
-                showError('حجم الصورة يجب أن يكون أقل من 5 ميجابايت');
-                return;
-            }
-            
-            try {
-                const fileName = `backgrounds/${currentUser.uid}_${Date.now()}.${file.name.split('.').pop()}`;
-                const uploadTask = storage.ref(fileName).put(file);
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في تسجيل الدخول';
                 
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // Progress
-                    },
-                    (error) => {
-                        showError('حدث خطأ في رفع الخلفية');
-                    },
-                    async () => {
-                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                        updateBackgroundImage(downloadURL);
-                        showSuccess('تم رفع الخلفية بنجاح');
-                    }
-                );
-            } catch (error) {
-                showError('حدث خطأ في رفع الخلفية');
-            }
-        }
-
-        // Social links management
-        function addSocialLink() {
-            socialLinks.push({ platform: 'instagram', url: '' });
-            renderSocialLinks();
-        }
-
-        function removeSocialLink(index) {
-            socialLinks.splice(index, 1);
-            renderSocialLinks();
-            renderPreviewSocialLinks();
-        }
-
-        function renderSocialLinks() {
-            const container = document.getElementById('social-links');
-            container.innerHTML = '';
-            
-            socialLinks.forEach((link, index) => {
-                const linkDiv = document.createElement('div');
-                linkDiv.className = 'social-link';
-                linkDiv.innerHTML = `
-                    <select onchange="updateSocialPlatform(${index}, this.value)">
-                        ${Object.keys(socialPlatforms).map(platform => 
-                            `<option value="${platform}" ${link.platform === platform ? 'selected' : ''}>${socialPlatforms[platform].name}</option>`
-                        ).join('')}
-                    </select>
-                    <input type="url" placeholder="رابط الحساب" value="${link.url}" 
-                           onchange="updateSocialUrl(${index}, this.value)">
-                    <button class="remove-link" onclick="removeSocialLink(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                container.appendChild(linkDiv);
-            });
-        }
-
-        function updateSocialPlatform(index, platform) {
-            socialLinks[index].platform = platform;
-            renderPreviewSocialLinks();
-        }
-
-        function updateSocialUrl(index, url) {
-            socialLinks[index].url = url;
-            renderPreviewSocialLinks();
-        }
-
-        function renderPreviewSocialLinks() {
-            const container = document.getElementById('preview-social');
-            container.innerHTML = '';
-            
-            socialLinks.filter(link => link.url).forEach(link => {
-                const platform = socialPlatforms[link.platform];
-                if (platform) {
-                    const linkDiv = document.createElement('div');
-                    linkDiv.className = 'preview-social-link';
-                    linkDiv.innerHTML = `
-                        <div class="preview-social-icon ${link.platform}">
-                            <i class="${platform.icon}"></i>
-                        </div>
-                        <span>${platform.name}</span>
-                    `;
-                    container.appendChild(linkDiv);
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'البريد الإلكتروني غير مسجل';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'كلمة المرور غير صحيحة';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'تم تجاوز عدد المحاولات المسموح. حاول لاحقاً';
+                        break;
                 }
-            });
-        }
-
-        // Save profile
-        async function saveProfile() {
-            if (!currentUsername) {
-                showError('لم يتم العثور على اسم المستخدم');
-                return;
+                
+                showError(errorMessage);
             }
+        });
+
+        // إنشاء الحساب
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            const name = document.getElementById('name').value.trim();
-            const bio = document.getElementById('bio').value.trim();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const username = document.getElementById('signup-username').value.trim();
             
-            if (!name) {
-                showError('يرجى إدخال الاسم');
+            showLoading(true);
+            clearMessages();
+            
+            // التحقق من اسم المستخدم
+            const isUsernameValid = await checkUsername(username);
+            if (!isUsernameValid) {
+                showLoading(false);
+                showError('يرجى اختيار اسم مستخدم صحيح ومتاح');
                 return;
             }
             
             try {
-                const phoneScreen = document.getElementById('phone-screen');
-                const previewAvatar = document.getElementById('preview-avatar');
+                // إنشاء الحساب
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
                 
-                const profileData = {
-                    name: name,
-                    bio: bio,
-                    avatar: previewAvatar.style.backgroundImage ? previewAvatar.style.backgroundImage.slice(5, -2) : '',
-                    backgroundColor: phoneScreen.style.backgroundImage ? '' : getSelectedColor(),
-                    backgroundImage: phoneScreen.style.backgroundImage ? phoneScreen.style.backgroundImage.slice(5, -2) : '',
-                    socialLinks: socialLinks.filter(link => link.url),
+                // حفظ بيانات المستخدم
+                await db.collection('users').doc(username).set({
+                    uid: user.uid,
+                    email: email,
+                    username: username,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // إنشاء ملف تعريفي افتراضي
+                await db.collection('profiles').doc(username).set({
+                    uid: user.uid,
+                    username: username,
+                    name: '',
+                    bio: '',
+                    avatar: '',
+                    backgroundColor: '#667eea',
+                    backgroundImage: '',
+                    socialLinks: [],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
+                });
                 
-                await db.collection('profiles').doc(currentUsername).update(profileData);
-                showSuccess('تم حفظ البيانات بنجاح!');
+                showSuccess('تم إنشاء الحساب بنجاح!');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
                 
             } catch (error) {
-                console.error('Error saving profile:', error);
-                showError('حدث خطأ في حفظ البيانات');
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في إنشاء الحساب';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
+                        break;
+                }
+                
+                showError(errorMessage);
             }
-        }
+        });
 
-        function getSelectedColor() {
-            const selectedOption = document.querySelector('.color-option.selected');
-            return selectedOption ? selectedOption.dataset.color : '#667eea';
-        }
-
-        // Copy profile URL
-        function copyProfileUrl() {
-            const profileUrl = document.getElementById('profile-url').textContent;
-            navigator.clipboard.writeText(profileUrl).then(() => {
-                showSuccess('تم نسخ الرابط بنجاح!');
-            }).catch(() => {
-                showError('حدث خطأ في نسخ الرابط');
-            });
-        }
-
-        // Logout
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.href = 'index.html';
-            });
-        }
-
-        // Utility function
-        function adjustColor(color, amount) {
-            const usePound = color[0] === '#';
-            const col = usePound ? color.slice(1) : color;
-            const num = parseInt(col, 16);
-            let r = (num >> 16) + amount;
-            let g = (num >> 8 & 0x00FF) + amount;
-            let b = (num & 0x0000FF) + amount;
-            r = r > 255 ? 255 : r < 0 ? 0 : r;
-            g = g > 255 ? 255 : g < 0 ? 0 : g;
-            b = b > 255 ? 255 : b < 0 ? 0 : b;
-            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
-        }
-
-        // Real-time preview updates
-        document.getElementById('name').addEventListener('input', updatePreview);
-        document.getElementById('bio').addEventListener('input', updatePreview);
+        // نسيان كلمة المرور
+        document.querySelector('.forgot-password').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            if (!email) {
+                showError('يرجى إدخال البريد الإلكتروني أولاً');
+                return;
+            }
+            
+            try {
+                await auth.sendPasswordResetEmail(email);
+                showSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+            } catch (error) {
+                showError('حدث خطأ في إرسال رابط إعادة تعيين كلمة المرور');
+            }
+        });
     </script>
 </body>
 </html>
