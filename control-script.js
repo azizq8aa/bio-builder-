@@ -44,6 +44,7 @@ auth.onAuthStateChanged(async (user) => {
 // Load user data
 async function loadUserData() {
     try {
+        // Find username by UID
         const usersRef = database.ref('users');
         const snapshot = await usersRef.orderByChild('uid').equalTo(currentUser.uid).once('value');
         
@@ -51,9 +52,11 @@ async function loadUserData() {
             const userData = Object.values(snapshot.val())[0];
             currentUsername = userData.username;
             
+            // Update profile URL
             document.getElementById('profile-url').value = 
                 `${window.location.origin}/view.html?user=${currentUsername}`;
             
+            // Load profile data
             await loadProfile();
         }
     } catch (error) {
@@ -71,11 +74,15 @@ async function loadProfile() {
         if (snapshot.exists()) {
             const profileData = snapshot.val();
             
+            // Fill form fields
             document.getElementById('name').value = profileData.name || '';
             document.getElementById('bio').value = profileData.bio || '';
             document.getElementById('background-color').value = profileData.backgroundColor || '#667eea';
             
+            // Load social links
             loadSocialLinks(profileData.socialLinks || []);
+            
+            // Update preview
             updatePreview();
         }
     } catch (error) {
@@ -134,23 +141,90 @@ function removeSocialLink(button) {
     updatePreview();
 }
 
+// Update background color
+function updateBackgroundColor() {
+    const color = document.getElementById('background-color').value;
+    const previewScreen = document.getElementById('preview-screen');
+    previewScreen.style.background = `linear-gradient(135deg, ${color}, ${adjustColor(color, -20)})`;
+}
+
+// Upload avatar
+async function uploadAvatar() {
+    const file = document.getElementById('avatar-input').files[0];
+    if (!file) return;
+    
+    showLoading(true);
+    
+    try {
+        const storageRef = storage.ref(`avatars/${currentUsername}/${Date.now()}_${file.name}`);
+        const snapshot = await storageRef.put(file);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        
+        // Update preview
+        const previewAvatar = document.getElementById('preview-avatar');
+        previewAvatar.style.backgroundImage = `url("${downloadURL}")`;
+        previewAvatar.innerHTML = '';
+        
+        // Save to database
+        await database.ref(`profiles/${currentUsername}/avatar`).set(downloadURL);
+        
+        showMessage('تم رفع الصورة الشخصية بنجاح', 'success');
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        showMessage('خطأ في رفع الصورة الشخصية', 'error');
+    } finally {
+        showLoading(false);
+    }
+}
+
+// Upload background
+async function uploadBackground() {
+    const file = document.getElementById('background-input').files[0];
+    if (!file) return;
+    
+    showLoading(true);
+    
+    try {
+        const storageRef = storage.ref(`backgrounds/${currentUsername}/${Date.now()}_${file.name}`);
+        const snapshot = await storageRef.put(file);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        
+        // Update preview
+        const previewScreen = document.getElementById('preview-screen');
+        previewScreen.style.backgroundImage = `url("${downloadURL}")`;
+        previewScreen.style.backgroundSize = 'cover';
+        previewScreen.style.backgroundPosition = 'center';
+        
+        // Save to database
+        await database.ref(`profiles/${currentUsername}/backgroundImage`).set(downloadURL);
+        
+        showMessage('تم رفع صورة الخلفية بنجاح', 'success');
+    } catch (error) {
+        console.error('Error uploading background:', error);
+        showMessage('خطأ في رفع صورة الخلفية', 'error');
+    } finally {
+        showLoading(false);
+    }
+}
+
 // Update preview
 function updatePreview() {
+    // Update name and bio
     const name = document.getElementById('name').value || 'اسمك هنا';
     const bio = document.getElementById('bio').value || 'نبذة تعريفية قصيرة';
-    const backgroundColor = document.getElementById('background-color').value;
     
     document.getElementById('preview-name').textContent = name;
     document.getElementById('preview-bio').textContent = bio;
     
-    const previewScreen = document.getElementById('preview-screen');
-    previewScreen.style.background = `linear-gradient(135deg, ${backgroundColor}, ${adjustColor(backgroundColor, -20)})`;
+    // Update background color
+    updateBackgroundColor();
     
-    renderPreviewSocialLinks();
+    // Update social links
+    updatePreviewSocialLinks();
 }
 
-// Render preview social links
-function renderPreviewSocialLinks() {
+// Update preview social links
+function updatePreviewSocialLinks() {
     const container = document.getElementById('preview-social-links');
     container.innerHTML = '';
     
@@ -162,92 +236,24 @@ function renderPreviewSocialLinks() {
         const platform = select.value;
         const url = input.value.trim();
         
-        if (platform && url && socialPlatforms[platform]) {
-            const linkElement = document.createElement('div');
-            linkElement.className = 'social-link';
-            linkElement.innerHTML = `
-                <div class="social-icon ${platform}">
-                    <i class="${socialPlatforms[platform].icon}"></i>
-                </div>
-                <span>${socialPlatforms[platform].name}</span>
-            `;
-            container.appendChild(linkElement);
+        if (platform && url) {
+            const platformData = socialPlatforms[platform];
+            if (platformData) {
+                const linkElement = document.createElement('a');
+                linkElement.className = 'social-link';
+                linkElement.href = url.startsWith('http') ? url : 'https://' + url;
+                linkElement.target = '_blank';
+                linkElement.innerHTML = `
+                    <div class="social-icon">
+                        <i class="${platformData.icon}"></i>
+                    </div>
+                    <span>${platformData.name}</span>
+                `;
+                container.appendChild(linkElement);
+            }
         }
     });
 }
-
-// Upload avatar
-document.getElementById('avatar-input').addEventListener('change', async function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    if (file.size > 5 * 1024 * 1024) {
-        showMessage('حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت', 'error');
-        return;
-    }
-    
-    try {
-        showLoading(true);
-        
-        const storageRef = storage.ref(`avatars/${currentUsername}/${Date.now()}_${file.name}`);
-        const snapshot = await storageRef.put(file);
-        const downloadURL = await snapshot.ref.getDownloadURL();
-        
-        document.getElementById('preview-avatar').style.backgroundImage = `url("${downloadURL}")`;
-        document.getElementById('preview-avatar').innerHTML = '';
-        
-        await database.ref('profiles/' + currentUsername + '/avatar').set(downloadURL);
-        
-        showMessage('تم رفع الصورة الشخصية بنجاح', 'success');
-    } catch (error) {
-        console.error('Error uploading avatar:', error);
-        showMessage('خطأ في رفع الصورة الشخصية', 'error');
-    } finally {
-        showLoading(false);
-    }
-});
-
-// Upload background
-document.getElementById('background-input').addEventListener('change', async function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    if (file.size > 10 * 1024 * 1024) {
-        showMessage('حجم الصورة كبير جداً. الحد الأقصى 10 ميجابايت', 'error');
-        return;
-    }
-    
-    try {
-        showLoading(true);
-        
-        const storageRef = storage.ref(`backgrounds/${currentUsername}/${Date.now()}_${file.name}`);
-        const snapshot = await storageRef.put(file);
-        const downloadURL = await snapshot.ref.getDownloadURL();
-        
-        document.getElementById('preview-screen').style.backgroundImage = `url("${downloadURL}")`;
-        
-        await database.ref('profiles/' + currentUsername + '/backgroundImage').set(downloadURL);
-        
-        showMessage('تم رفع صورة الخلفية بنجاح', 'success');
-    } catch (error) {
-        console.error('Error uploading background:', error);
-        showMessage('خطأ في رفع صورة الخلفية', 'error');
-    } finally {
-        showLoading(false);
-    }
-});
-
-// Background color change
-document.getElementById('background-color').addEventListener('change', async function() {
-    const color = this.value;
-    updatePreview();
-    
-    try {
-        await database.ref('profiles/' + currentUsername + '/backgroundColor').set(color);
-    } catch (error) {
-        console.error('Error saving background color:', error);
-    }
-});
 
 // Save profile
 async function saveProfile() {
@@ -256,13 +262,14 @@ async function saveProfile() {
         return;
     }
     
+    showLoading(true);
+    
     try {
-        showLoading(true);
-        
         const name = document.getElementById('name').value.trim();
         const bio = document.getElementById('bio').value.trim();
         const backgroundColor = document.getElementById('background-color').value;
         
+        // Collect social links
         const socialLinks = [];
         const socialLinkItems = document.querySelectorAll('.social-link-item');
         
@@ -277,6 +284,7 @@ async function saveProfile() {
             }
         });
         
+        // Save to database
         const profileData = {
             name,
             bio,
@@ -285,35 +293,27 @@ async function saveProfile() {
             updatedAt: firebase.database.ServerValue.TIMESTAMP
         };
         
-        await database.ref('profiles/' + currentUsername).update(profileData);
+        await database.ref(`profiles/${currentUsername}`).update(profileData);
         
         showMessage('تم حفظ البيانات بنجاح!', 'success');
-        updatePreview();
-        
     } catch (error) {
         console.error('Error saving profile:', error);
-        showMessage('حدث خطأ في حفظ البيانات', 'error');
+        showMessage('خطأ في حفظ البيانات', 'error');
     } finally {
         showLoading(false);
     }
 }
 
-// Copy profile URL
-function copyProfileUrl() {
+// Copy URL
+function copyUrl() {
     const urlInput = document.getElementById('profile-url');
     urlInput.select();
-    urlInput.setSelectionRange(0, 99999);
-    
-    try {
-        document.execCommand('copy');
-        showMessage('تم نسخ الرابط بنجاح!', 'success');
-    } catch (error) {
-        showMessage('فشل في نسخ الرابط', 'error');
-    }
+    document.execCommand('copy');
+    showMessage('تم نسخ الرابط!', 'success');
 }
 
-// Sign out
-async function signOut() {
+// Logout
+async function logout() {
     if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
         try {
             await auth.signOut();
@@ -325,44 +325,22 @@ async function signOut() {
     }
 }
 
-// Show message
+// Utility functions
 function showMessage(text, type) {
-    // Create message element
-    const message = document.createElement('div');
-    message.className = `message ${type}`;
-    message.textContent = text;
-    message.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 500;
-        z-index: 1000;
-        max-width: 300px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        background: ${type === 'success' ? '#28a745' : '#dc3545'};
-    `;
-    
-    document.body.appendChild(message);
+    const messageEl = document.getElementById('message');
+    messageEl.textContent = text;
+    messageEl.className = `message ${type}`;
+    messageEl.style.display = 'block';
     
     setTimeout(() => {
-        message.remove();
+        messageEl.style.display = 'none';
     }, 3000);
 }
 
-// Show/hide loading
 function showLoading(show) {
-    const overlay = document.getElementById('loading-overlay');
-    if (show) {
-        overlay.classList.add('show');
-    } else {
-        overlay.classList.remove('show');
-    }
+    document.getElementById('loading').style.display = show ? 'flex' : 'none';
 }
 
-// Utility function to adjust color
 function adjustColor(color, amount) {
     const usePound = color[0] === '#';
     const col = usePound ? color.slice(1) : color;
@@ -377,11 +355,9 @@ function adjustColor(color, amount) {
 }
 
 // Initialize preview on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners for real-time preview
     document.getElementById('name').addEventListener('input', updatePreview);
     document.getElementById('bio').addEventListener('input', updatePreview);
-    
-    // Initialize preview
-    updatePreview();
+    document.getElementById('background-color').addEventListener('change', updatePreview);
 });
