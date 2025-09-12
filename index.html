@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Q8 Bio - منشئ الملفات التعريفية الذكي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            -webkit-box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .tab {
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            -webkit-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            -webkit-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            background: white;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            -webkit-box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .btn:hover {
+            -webkit-transform: translateY(-2px);
+            -ms-transform: translateY(-2px);
+            transform: translateY(-2px);
+            -webkit-box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            -webkit-transform: none;
+            -ms-transform: none;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            margin: 10px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            -webkit-animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+
+        .forgot-password {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .form-group input {
+                padding: 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .btn {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .tab {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            .logo {
+                font-size: 32px;
+            }
+        }
+
+        /* Landscape orientation */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+                max-width: 500px;
+            }
+            
+            .logo {
+                font-size: 32px;
+                margin-bottom: 5px;
+            }
+            
+            .subtitle {
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+            
+            .tabs {
+                margin-bottom: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Touch improvements */
+        .btn, .tab, input {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* iOS specific fixes */
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            -webkit-appearance: none;
+            -webkit-border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Q8 Bio</div>
+        <div class="subtitle">منشئ الملفات التعريفية الذكي</div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('signin')">تسجيل الدخول</button>
+            <button class="tab" onclick="switchTab('signup')">إنشاء حساب</button>
+        </div>
+
+        <div id="message" class="message"></div>
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- تسجيل الدخول -->
+        <div id="signin-form" class="form-container active">
+            <form onsubmit="signIn(event)">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="signin-email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="signin-password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn">تسجيل الدخول</button>
+                <a href="#" class="forgot-password" onclick="resetPassword()">نسيت كلمة المرور؟</a>
+            </form>
+        </div>
+
+        <!-- إنشاء حساب -->
+        <div id="signup-form" class="form-container">
+            <form onsubmit="signUp(event)">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="signup-email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="signup-username" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" autocomplete="username">
+                </div>
+                <button type="submit" class="btn">إنشاء الحساب</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
+            authDomain: "bio-builder-new.firebaseapp.com",
+            databaseURL: "https://bio-builder-new-default-rtdb.firebaseio.com",
+            projectId: "bio-builder-new",
+            storageBucket: "bio-builder-new.firebasestorage.app",
+            messagingSenderId: "618331429708",
+            appId: "1:618331429708:web:4357af8958ac90a67d0de9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = 'control.html';
+            }
+        });
+
+        // Switch between tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update form containers
+            document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + '-form').classList.add('active');
+            
+            // Clear messages
+            clearMessage();
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+        }
+
+        // Clear message
+        function clearMessage() {
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // Show/hide loading
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.querySelectorAll('.btn').forEach(btn => btn.disabled = show);
+        }
+
+        // Sign In
+        async function signIn(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            
+            showLoading(true);
+            clearMessage();
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showMessage('تم تسجيل الدخول بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'control.html';
+                }, 1000);
+            } catch (error) {
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في تسجيل الدخول';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'البريد الإلكتروني غير مسجل';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'كلمة المرور غير صحيحة';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'تم تجاوز عدد المحاولات المسموح. حاول لاحقاً';
+                        break;
+                }
+                
+                showMessage(errorMessage, 'error');
+            }
+        }
+
+        // Sign Up
+        async function signUp(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const username = document.getElementById('signup-username').value.trim();
+            
+            showLoading(true);
+            clearMessage();
+            
+            try {
+                // Create user account
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Save user data
+                await database.ref('users/' + username).set({
+                    uid: user.uid,
+                    email: email,
+                    username: username,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // Create default profile
+                await database.ref('profiles/' + username).set({
+                    uid: user.uid,
+                    username: username,
+                    name: '',
+                    bio: '',
+                    avatar: '',
+                    backgroundColor: '#667eea',
+                    backgroundImage: '',
+                    socialLinks: [],
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                });
+                
+                showMessage('تم إنشاء الحساب بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'control.html';
+                }, 1000);
+                
+            } catch (error) {
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في إنشاء الحساب';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
+                        break;
+                }
+                
+                showMessage(errorMessage, 'error');
+            }
+        }
+
+        // Reset Password
+        async function resetPassword() {
+            const email = document.getElementById('signin-email').value;
+            if (!email) {
+                showMessage('يرجى إدخال البريد الإلكتروني أولاً', 'error');
+                return;
+            }
+            
+            try {
+                await auth.sendPasswordResetEmail(email);
+                showMessage('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني', 'success');
+            } catch (error) {
+                showMessage('حدث خطأ في إرسال رابط إعادة التعيين', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
