@@ -113,6 +113,7 @@
             color: #666;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
@@ -122,7 +123,7 @@
             font-weight: 700;
             margin-bottom: 12px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            letter-spacing: 0.5px;
+            line-height: 1.2;
         }
 
         .profile-bio {
@@ -145,7 +146,7 @@
         .social-link {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -156,28 +157,46 @@
             font-size: 16px;
             font-weight: 500;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .social-link:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .social-link i {
+        .social-icon {
             width: 24px;
-            text-align: center;
-            font-size: 20px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            color: white;
         }
+
+        .social-icon.instagram { background: #E4405F; }
+        .social-icon.twitter { background: #1DA1F2; }
+        .social-icon.facebook { background: #1877F2; }
+        .social-icon.linkedin { background: #0A66C2; }
+        .social-icon.youtube { background: #FF0000; }
+        .social-icon.tiktok { background: #000000; }
+        .social-icon.snapchat { background: #FFFC00; color: #000; }
+        .social-icon.whatsapp { background: #25D366; }
+        .social-icon.telegram { background: #0088CC; }
+        .social-icon.website { background: #667eea; }
 
         .brand-footer {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
 
@@ -205,7 +224,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error-message {
+        .error-state {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -228,7 +247,7 @@
             margin-bottom: 12px;
         }
 
-        .error-text {
+        .error-message {
             font-size: 16px;
             opacity: 0.8;
             line-height: 1.5;
@@ -252,7 +271,6 @@
 <body>
     <div class="phone-container">
         <div class="phone-screen" id="phone-screen">
-            <!-- Status Bar -->
             <div class="status-bar">
                 <div class="status-left">
                     <i class="fas fa-signal"></i>
@@ -262,37 +280,34 @@
                 <div class="status-right">9:41</div>
             </div>
             
-            <!-- Loading State -->
-            <div class="loading" id="loading-state">
-                <div class="spinner"></div>
-                <p>جاري تحميل الملف التعريفي...</p>
-            </div>
-            
-            <!-- Profile Content -->
-            <div class="phone-content" id="profile-content" style="display: none;">
-                <div class="profile-avatar" id="profile-avatar">
-                    <i class="fas fa-user"></i>
+            <div class="phone-content" id="phone-content">
+                <div class="loading" id="loading-state">
+                    <div class="spinner"></div>
+                    <p>جاري تحميل الملف التعريفي...</p>
                 </div>
-                <div class="profile-name" id="profile-name">اسم المستخدم</div>
-                <div class="profile-bio" id="profile-bio">نبذة تعريفية قصيرة</div>
-                <div class="social-links" id="social-links">
-                    <!-- Social links will be populated here -->
+                
+                <div class="error-state" id="error-state" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="error-title">الملف التعريفي غير موجود</div>
+                    <div class="error-message">
+                        عذراً، لم يتم العثور على هذا الملف التعريفي.<br>
+                        تأكد من صحة الرابط أو تواصل مع صاحب الحساب.
+                    </div>
+                </div>
+                
+                <div id="profile-content" style="display: none;">
+                    <div class="profile-avatar" id="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-name" id="profile-name"></div>
+                    <div class="profile-bio" id="profile-bio"></div>
+                    <div class="social-links" id="social-links"></div>
                 </div>
                 
                 <div class="brand-footer">
                     تم إنشاؤه بواسطة Q8 Bio
-                </div>
-            </div>
-            
-            <!-- Error State -->
-            <div class="error-message" id="error-state" style="display: none;">
-                <div class="error-icon">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <div class="error-title">الملف التعريفي غير موجود</div>
-                <div class="error-text">
-                    <p>لم يتم العثور على الملف التعريفي المطلوب.</p>
-                    <p>تأكد من صحة الرابط أو قم بإنشاء حساب جديد.</p>
                 </div>
             </div>
         </div>
@@ -316,6 +331,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Social media platforms
         const socialPlatforms = {
             instagram: { name: 'Instagram', icon: 'fab fa-instagram' },
             twitter: { name: 'Twitter', icon: 'fab fa-twitter' },
@@ -332,7 +348,16 @@
         // Get username from URL
         function getUsernameFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('user');
+            const username = urlParams.get('user');
+            
+            if (!username) {
+                // Try to get from path (for q8.bio/username format)
+                const path = window.location.pathname;
+                const pathUsername = path.split('/').pop();
+                return pathUsername && pathUsername !== 'profile.html' ? pathUsername : null;
+            }
+            
+            return username;
         }
 
         // Load profile data
@@ -352,8 +377,8 @@
                     return;
                 }
                 
-                const data = profileDoc.data();
-                displayProfile(data);
+                const profileData = profileDoc.data();
+                displayProfile(profileData);
                 
             } catch (error) {
                 console.error('Error loading profile:', error);
@@ -363,9 +388,9 @@
 
         // Display profile
         function displayProfile(data) {
-            // Hide loading, show content
+            // Hide loading
             document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('profile-content').style.display = 'flex';
+            document.getElementById('profile-content').style.display = 'block';
             
             // Set background
             const phoneScreen = document.getElementById('phone-screen');
@@ -373,6 +398,7 @@
                 phoneScreen.style.backgroundImage = `url("${data.backgroundImage}")`;
                 phoneScreen.style.backgroundSize = 'cover';
                 phoneScreen.style.backgroundPosition = 'center';
+                phoneScreen.style.backgroundRepeat = 'no-repeat';
             } else if (data.backgroundColor) {
                 phoneScreen.style.background = `linear-gradient(135deg, ${data.backgroundColor}, ${adjustColor(data.backgroundColor, -20)})`;
             }
@@ -388,29 +414,34 @@
             
             // Set name and bio
             document.getElementById('profile-name').textContent = data.name || 'مستخدم Q8 Bio';
-            document.getElementById('profile-bio').textContent = data.bio || 'مرحباً بك في ملفي التعريفي';
+            document.getElementById('profile-bio').textContent = data.bio || 'مرحباً بكم في ملفي التعريفي';
             
             // Set social links
-            const socialLinksContainer = document.getElementById('social-links');
-            socialLinksContainer.innerHTML = '';
+            renderSocialLinks(data.socialLinks || []);
+        }
+
+        // Render social links
+        function renderSocialLinks(socialLinks) {
+            const container = document.getElementById('social-links');
+            container.innerHTML = '';
             
-            if (data.socialLinks && data.socialLinks.length > 0) {
-                data.socialLinks.forEach(link => {
-                    if (link.platform && link.url && socialPlatforms[link.platform]) {
-                        const platform = socialPlatforms[link.platform];
-                        const linkElement = document.createElement('a');
-                        linkElement.className = 'social-link';
-                        linkElement.href = link.url;
-                        linkElement.target = '_blank';
-                        linkElement.rel = 'noopener noreferrer';
-                        linkElement.innerHTML = `
+            socialLinks.filter(link => link.url).forEach(link => {
+                const platform = socialPlatforms[link.platform];
+                if (platform) {
+                    const linkElement = document.createElement('a');
+                    linkElement.className = 'social-link';
+                    linkElement.href = link.url;
+                    linkElement.target = '_blank';
+                    linkElement.rel = 'noopener noreferrer';
+                    linkElement.innerHTML = `
+                        <div class="social-icon ${link.platform}">
                             <i class="${platform.icon}"></i>
-                            <span>${platform.name}</span>
-                        `;
-                        socialLinksContainer.appendChild(linkElement);
-                    }
-                });
-            }
+                        </div>
+                        <span>${platform.name}</span>
+                    `;
+                    container.appendChild(linkElement);
+                }
+            });
         }
 
         // Show error state
