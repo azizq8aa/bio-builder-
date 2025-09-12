@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Q8 Bio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="control-style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-cog"></i> لوحة التحكم</h1>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="editor-section">
+                <div class="profile-url-section">
+                    <h3><i class="fas fa-link"></i> رابط ملفك التعريفي</h3>
+                    <div class="url-display">
+                        <input type="text" id="profile-url" readonly>
+                        <button onclick="copyUrl()" class="copy-btn">
+                            <i class="fas fa-copy"></i> نسخ الرابط
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> المعلومات الأساسية</h3>
+                    
+                    <div class="form-group">
+                        <label>الاسم</label>
+                        <input type="text" id="name" placeholder="أدخل اسمك">
+                    </div>
+
+                    <div class="form-group">
+                        <label>النبذة التعريفية</label>
+                        <textarea id="bio" placeholder="اكتب نبذة قصيرة عنك" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-image"></i> الصورة الشخصية والخلفية</h3>
+                    
+                    <div class="image-section">
+                        <div class="image-group">
+                            <label>الصورة الشخصية</label>
+                            <input type="file" id="avatar-input" accept="image/*" onchange="uploadAvatar()">
+                            <button onclick="document.getElementById('avatar-input').click()" class="upload-btn">
+                                <i class="fas fa-user"></i> اختيار صورة
+                            </button>
+                        </div>
+
+                        <div class="image-group">
+                            <label>صورة الخلفية</label>
+                            <input type="file" id="background-input" accept="image/*" onchange="uploadBackground()">
+                            <button onclick="document.getElementById('background-input').click()" class="upload-btn">
+                                <i class="fas fa-image"></i> اختيار خلفية
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="color-section">
+                        <label>لون الخلفية</label>
+                        <div class="color-picker">
+                            <input type="color" id="background-color" value="#667eea" onchange="updateBackgroundColor()">
+                            <span>أو اختر لون مخصص</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-share-alt"></i> الروابط الاجتماعية</h3>
+                    <div id="social-links-container">
+                        <!-- Social links will be added here -->
+                    </div>
+                    <button onclick="addSocialLink()" class="add-link-btn">
+                        <i class="fas fa-plus"></i> إضافة رابط جديد
+                    </button>
+                </div>
+
+                <div class="save-section">
+                    <button onclick="saveProfile()" class="save-btn">
+                        <i class="fas fa-save"></i> حفظ البيانات
+                    </button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h3><i class="fas fa-eye"></i> المعاينة المباشرة</h3>
+                <div class="phone-preview">
+                    <div class="phone-frame">
+                        <div class="phone-screen" id="preview-screen">
+                            <div class="status-bar">
+                                <span>9:41</span>
+                                <div class="status-icons">
+                                    <i class="fas fa-signal"></i>
+                                    <i class="fas fa-wifi"></i>
+                                    <i class="fas fa-battery-full"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-content">
+                                <div class="profile-avatar" id="preview-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="profile-name" id="preview-name">اسمك هنا</div>
+                                <div class="profile-bio" id="preview-bio">نبذة تعريفية قصيرة</div>
+                                <div class="social-links" id="preview-social-links">
+                                    <!-- Preview social links -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <span>جاري الحفظ...</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    
+    <script src="control-script.js"></script>
+</body>
+</html>
