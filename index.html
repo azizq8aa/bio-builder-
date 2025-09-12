@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q8 Bio - منشئ الملفات التعريفية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .forgot-password {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #363;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .username-validation {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .username-validation.error {
+            color: #c33;
+        }
+
+        .username-validation.success {
+            color: #363;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Q8 Bio</div>
+        <div class="subtitle">منشئ الملفات التعريفية الذكي</div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('signin')">تسجيل الدخول</button>
+            <button class="tab" onclick="switchTab('signup')">إنشاء حساب</button>
+        </div>
+
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>جاري المعالجة...</p>
+        </div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="signin-form">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="signin-email" required>
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="signin-password" required>
+            </div>
+            <button type="submit" class="btn">تسجيل الدخول</button>
+            <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+        </form>
+
+        <!-- نموذج إنشاء الحساب -->
+        <form id="signup-form" style="display: none;">
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="signup-email" required>
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="signup-password" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="signup-username" required pattern="[a-zA-Z0-9_]{3,20}" 
+                       placeholder="أحرف وأرقام فقط (3-20 حرف)">
+                <div class="username-validation" id="username-validation"></div>
+            </div>
+            <button type="submit" class="btn">إنشاء الحساب</button>
+        </form>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
+            authDomain: "bio-builder-new.firebaseapp.com",
+            databaseURL: "https://bio-builder-new-default-rtdb.firebaseio.com",
+            projectId: "bio-builder-new",
+            storageBucket: "bio-builder-new.firebasestorage.app",
+            messagingSenderId: "618331429708",
+            appId: "1:618331429708:web:4357af8958ac90a67d0de9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // التحقق من حالة المصادقة
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // تبديل التبويبات
+        function switchTab(tab) {
+            const signinForm = document.getElementById('signin-form');
+            const signupForm = document.getElementById('signup-form');
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'signin') {
+                signinForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                tabs[0].classList.add('active');
+            } else {
+                signinForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                tabs[1].classList.add('active');
+            }
+            
+            clearMessages();
+        }
+
+        // إظهار الرسائل
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        function clearMessages() {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // التحقق من اسم المستخدم (مبسط)
+        function validateUsername(username) {
+            const validation = document.getElementById('username-validation');
+            
+            if (!username || username.length < 3) {
+                validation.textContent = 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
+                validation.className = 'username-validation error';
+                return false;
+            }
+
+            if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+                validation.textContent = 'اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط';
+                validation.className = 'username-validation error';
+                return false;
+            }
+
+            validation.textContent = 'اسم المستخدم صحيح ✓';
+            validation.className = 'username-validation success';
+            return true;
+        }
+
+        // التحقق من اسم المستخدم عند الكتابة
+        document.getElementById('signup-username').addEventListener('input', (e) => {
+            const username = e.target.value.trim();
+            if (username.length >= 3) {
+                validateUsername(username);
+            } else {
+                document.getElementById('username-validation').textContent = '';
+            }
+        });
+
+        // تسجيل الدخول
+        document.getElementById('signin-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            
+            showLoading(true);
+            clearMessages();
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showSuccess('تم تسجيل الدخول بنجاح!');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (error) {
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في تسجيل الدخول';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'البريد الإلكتروني غير مسجل';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'كلمة المرور غير صحيحة';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'تم تجاوز عدد المحاولات المسموح. حاول لاحقاً';
+                        break;
+                }
+                
+                showError(errorMessage);
+            }
+        });
+
+        // إنشاء الحساب
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const username = document.getElementById('signup-username').value.trim();
+            
+            // التحقق البسيط فقط
+            if (!email || !password || !username) {
+                showError('يرجى ملء جميع الحقول');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showError('اسم المستخدم يجب أن يكون 3 أحرف على الأقل');
+                return;
+            }
+            
+            showLoading(true);
+            clearMessages();
+            
+            try {
+                // إنشاء الحساب
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // حفظ بيانات المستخدم في Realtime Database
+                await database.ref('users/' + username).set({
+                    uid: user.uid,
+                    email: email,
+                    username: username,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // إنشاء ملف تعريفي افتراضي في Realtime Database
+                await database.ref('profiles/' + username).set({
+                    uid: user.uid,
+                    username: username,
+                    name: '',
+                    bio: '',
+                    avatar: '',
+                    backgroundColor: '#667eea',
+                    backgroundImage: '',
+                    socialLinks: [],
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                });
+                
+                showSuccess('تم إنشاء الحساب بنجاح!');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                showLoading(false);
+                let errorMessage = 'حدث خطأ في إنشاء الحساب';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
+                        break;
+                }
+                
+                showError(errorMessage);
+            }
+        });
+
+        // نسيان كلمة المرور
+        document.querySelector('.forgot-password').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            if (!email) {
+                showError('يرجى إدخال البريد الإلكتروني أولاً');
+                return;
+            }
+            
+            try {
+                await auth.sendPasswordResetEmail(email);
+                showSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+            } catch (error) {
+                showError('حدث خطأ في إرسال رابط إعادة تعيين كلمة المرور');
+            }
+        });
+    </script>
+</body>
+</html>
