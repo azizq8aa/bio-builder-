@@ -17,186 +17,396 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
+        /* Header */
         .header {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
         }
 
         .header h1 {
             color: #667eea;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
+        .header h1 i {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 32px;
+        }
+
+        /* Buttons */
         .btn {
-            padding: 12px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-primary { background: #667eea; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success { 
+            background: linear-gradient(135deg, #28a745, #20c997); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-danger { 
+            background: linear-gradient(135deg, #dc3545, #fd7e14); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-secondary { 
+            background: linear-gradient(135deg, #6c757d, #495057); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main Layout */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 20px;
+            grid-template-columns: 1fr 420px;
+            gap: 25px;
+            align-items: start;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
         }
 
+        /* Editor Section */
         .editor-section {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
 
         .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f8f9fa;
+            position: relative;
         }
 
         .form-section:last-child {
             border-bottom: none;
+            margin-bottom: 0;
         }
 
         .form-section h3 {
             color: #667eea;
-            margin-bottom: 20px;
-            font-size: 18px;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
         }
 
+        .form-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Form Groups */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
+            margin-bottom: 10px;
+            color: #495057;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px 15px;
+            padding: 15px 20px;
             border: 2px solid #e9ecef;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             transition: all 0.3s ease;
+            background: #fff;
+            font-family: inherit;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* URL Display */
         .url-display {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            gap: 15px;
+            align-items: stretch;
         }
 
         .url-display input {
             flex: 1;
             background: #f8f9fa;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 13px;
+            color: #667eea;
+            font-weight: 600;
         }
 
+        /* Image Section */
         .image-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .image-group {
             text-align: center;
+            padding: 20px;
+            border: 2px dashed #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-group:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .image-group label {
+            display: block;
+            margin-bottom: 15px;
+            color: #495057;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .color-input-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .color-input-group:hover {
+            border-color: #667eea;
+        }
+
+        .color-input-group input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .color-input-group label {
+            flex: 1;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* Social Links */
+        .social-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .social-link-item {
-            display: flex;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 140px 1fr auto;
+            gap: 15px;
             align-items: center;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .social-link-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .social-link-item:hover::before {
+            transform: scaleX(1);
         }
 
         .social-link-item select {
-            min-width: 120px;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: white;
+            font-weight: 500;
         }
 
         .social-link-item input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: white;
         }
 
+        .social-link-item .btn {
+            padding: 10px 15px;
+            min-width: auto;
+        }
+
+        /* Preview Section */
         .preview-section {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             position: sticky;
             top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-section h3 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .phone-frame {
-            width: 340px;
-            height: 680px;
-            background: #000;
-            border-radius: 35px;
-            padding: 8px;
+            width: 360px;
+            height: 720px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 40px;
+            padding: 12px;
             margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 2px 6px rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #34495e;
+            border-radius: 3px;
         }
 
         .phone-screen {
             width: 100%;
             height: 100%;
-            border-radius: 27px;
+            border-radius: 28px;
             overflow: hidden;
             position: relative;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -206,7 +416,7 @@
 
         .phone-content {
             position: absolute;
-            top: 50px;
+            top: 60px;
             left: 0;
             right: 0;
             bottom: 0;
@@ -220,95 +430,129 @@
         }
 
         .profile-avatar {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 3px solid white;
-            margin-bottom: 20px;
-            background: #ddd;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            color: #666;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.7);
             background-size: cover;
             background-position: center;
             overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .profile-name {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .profile-bio {
-            font-size: 14px;
+            font-size: 16px;
             opacity: 0.9;
-            margin-bottom: 25px;
-            line-height: 1.4;
-            max-width: 250px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            max-width: 280px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         }
 
         .social-links {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            max-width: 250px;
+            max-width: 280px;
         }
 
         .social-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.2);
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            padding: 12px 16px;
-            border-radius: 20px;
+            padding: 15px 20px;
+            border-radius: 25px;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .social-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 14px;
             color: white;
+            flex-shrink: 0;
         }
 
-        .social-icon.instagram { background: #E4405F; }
-        .social-icon.twitter { background: #1DA1F2; }
-        .social-icon.facebook { background: #1877F2; }
-        .social-icon.linkedin { background: #0A66C2; }
-        .social-icon.youtube { background: #FF0000; }
-        .social-icon.tiktok { background: #000000; }
-        .social-icon.snapchat { background: #FFFC00; color: #000; }
-        .social-icon.whatsapp { background: #25D366; }
-        .social-icon.telegram { background: #0088CC; }
-        .social-icon.website { background: #667eea; }
+        .social-icon.instagram { background: linear-gradient(135deg, #E4405F, #C13584); }
+        .social-icon.twitter { background: linear-gradient(135deg, #1DA1F2, #0d8bd9); }
+        .social-icon.facebook { background: linear-gradient(135deg, #1877F2, #166fe5); }
+        .social-icon.linkedin { background: linear-gradient(135deg, #0A66C2, #004182); }
+        .social-icon.youtube { background: linear-gradient(135deg, #FF0000, #cc0000); }
+        .social-icon.tiktok { background: linear-gradient(135deg, #000000, #333333); }
+        .social-icon.snapchat { background: linear-gradient(135deg, #FFFC00, #ffeb3b); color: #000; }
+        .social-icon.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .social-icon.telegram { background: linear-gradient(135deg, #0088CC, #005885); }
+        .social-icon.website { background: linear-gradient(135deg, #667eea, #764ba2); }
 
+        /* Messages */
         .message {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
+            top: 30px;
+            right: 30px;
+            padding: 20px 25px;
+            border-radius: 15px;
             color: white;
-            font-weight: 500;
+            font-weight: 600;
             z-index: 1000;
-            max-width: 300px;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease;
         }
 
-        .message.success { background: #28a745; }
-        .message.error { background: #dc3545; }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
 
+        .message.success { 
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .message.error { 
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+
+        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -322,28 +566,94 @@
             z-index: 1000;
             color: white;
             text-align: center;
+            backdrop-filter: blur(5px);
         }
 
-        .loading-overlay.show { display: flex; }
+        .loading-overlay.show { 
+            display: flex; 
+        }
 
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .loading-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .editor-section {
+                padding: 25px 20px;
+            }
+            
+            .image-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-frame {
+                width: 300px;
+                height: 600px;
+            }
+            
+            .url-display {
+                flex-direction: column;
+            }
+            
+            .social-link-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .social-link-item select,
+            .social-link-item input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phone-frame {
+                width: 280px;
+                height: 560px;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <h1><i class="fas fa-cog"></i> لوحة التحكم</h1>
             <button class="btn btn-danger" onclick="signOut()">
@@ -351,13 +661,15 @@
             </button>
         </div>
 
+        <!-- Main Content -->
         <div class="main-content">
+            <!-- Editor Section -->
             <div class="editor-section">
                 <!-- Profile URL -->
                 <div class="form-section">
                     <h3><i class="fas fa-link"></i> رابط ملفك التعريفي</h3>
                     <div class="url-display">
-                        <input type="text" id="profile-url" readonly>
+                        <input type="text" id="profile-url" readonly placeholder="سيتم إنشاء الرابط تلقائياً...">
                         <button class="btn btn-primary" onclick="copyProfileUrl()">
                             <i class="fas fa-copy"></i> نسخ الرابط
                         </button>
@@ -368,12 +680,12 @@
                 <div class="form-section">
                     <h3><i class="fas fa-user"></i> المعلومات الأساسية</h3>
                     <div class="form-group">
-                        <label>الاسم</label>
-                        <input type="text" id="name" placeholder="أدخل اسمك">
+                        <label><i class="fas fa-signature"></i> الاسم الكامل</label>
+                        <input type="text" id="name" placeholder="أدخل اسمك الكامل">
                     </div>
                     <div class="form-group">
-                        <label>النبذة التعريفية</label>
-                        <textarea id="bio" placeholder="اكتب نبذة قصيرة عنك" rows="3"></textarea>
+                        <label><i class="fas fa-quote-left"></i> النبذة التعريفية</label>
+                        <textarea id="bio" placeholder="اكتب نبذة قصيرة ومميزة عنك..." rows="4"></textarea>
                     </div>
                 </div>
 
@@ -381,40 +693,44 @@
                 <div class="form-section">
                     <h3><i class="fas fa-images"></i> الصورة الشخصية والخلفية</h3>
                     <div class="image-section">
-                        <div class="image-group">
-                            <label>الصورة الشخصية</label>
+                        <div class="image-group" onclick="document.getElementById('avatar-input').click()">
+                            <label><i class="fas fa-user-circle"></i> الصورة الشخصية</label>
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fas fa-upload"></i> اختيار صورة
+                            </button>
                             <input type="file" id="avatar-input" accept="image/*" style="display: none;">
-                            <button class="btn btn-secondary" onclick="document.getElementById('avatar-input').click()">
-                                <i class="fas fa-user-circle"></i> اختيار صورة
-                            </button>
                         </div>
-                        <div class="image-group">
-                            <label>صورة الخلفية</label>
-                            <input type="file" id="background-input" accept="image/*" style="display: none;">
-                            <button class="btn btn-secondary" onclick="document.getElementById('background-input').click()">
-                                <i class="fas fa-image"></i> اختيار خلفية
+                        <div class="image-group" onclick="document.getElementById('background-input').click()">
+                            <label><i class="fas fa-image"></i> صورة الخلفية</label>
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fas fa-upload"></i> اختيار خلفية
                             </button>
+                            <input type="file" id="background-input" accept="image/*" style="display: none;">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>لون الخلفية</label>
-                        <input type="color" id="background-color" value="#667eea">
+                        <div class="color-input-group">
+                            <input type="color" id="background-color" value="#667eea">
+                            <label><i class="fas fa-palette"></i> لون الخلفية الاحتياطي</label>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Social Links -->
                 <div class="form-section">
                     <h3><i class="fas fa-share-alt"></i> الروابط الاجتماعية</h3>
-                    <div id="social-links-container"></div>
-                    <button class="btn btn-success" onclick="addSocialLink()">
+                    <div class="social-links-container" id="social-links-container">
+                        <!-- Social links will be added here -->
+                    </div>
+                    <button class="btn btn-success" onclick="addSocialLink()" style="width: 100%; margin-top: 15px;">
                         <i class="fas fa-plus"></i> إضافة رابط جديد
                     </button>
                 </div>
 
                 <!-- Save Button -->
                 <div class="form-section">
-                    <button class="btn btn-primary" onclick="saveProfile()" style="width: 100%; padding: 15px;">
-                        <i class="fas fa-save"></i> حفظ البيانات
+                    <button class="btn btn-primary" onclick="saveProfile()" style="width: 100%; padding: 18px; font-size: 16px;">
+                        <i class="fas fa-save"></i> حفظ جميع البيانات
                     </button>
                 </div>
             </div>
@@ -429,8 +745,10 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div class="profile-name" id="preview-name">اسمك هنا</div>
-                            <div class="profile-bio" id="preview-bio">نبذة تعريفية قصيرة</div>
-                            <div class="social-links" id="preview-social-links"></div>
+                            <div class="profile-bio" id="preview-bio">نبذة تعريفية مميزة وقصيرة</div>
+                            <div class="social-links" id="preview-social-links">
+                                <!-- Social links preview -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -438,9 +756,12 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">
-        <div class="spinner"></div>
-        <p>جاري المعالجة...</p>
+        <div>
+            <div class="spinner"></div>
+            <div class="loading-text">جاري المعالجة...</div>
+        </div>
     </div>
 
     <!-- Firebase SDK -->
@@ -450,7 +771,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     
     <script>
-        // Firebase Configuration - bio-builder-new
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
             authDomain: "bio-builder-new.firebaseapp.com",
@@ -461,6 +782,7 @@
             appId: "1:618331429708:web:4357af8958ac90a67d0de9"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const database = firebase.database();
@@ -469,6 +791,7 @@
         let currentUser = null;
         let currentUsername = null;
 
+        // Social media platforms
         const socialPlatforms = {
             instagram: { name: 'Instagram', icon: 'fab fa-instagram' },
             twitter: { name: 'Twitter', icon: 'fab fa-twitter' },
@@ -482,14 +805,15 @@
             website: { name: 'موقع ويب', icon: 'fas fa-globe' }
         };
 
-        // Auth check
+        // Authentication state observer
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
-                console.log('User logged in:', user.uid);
+                console.log('✅ User authenticated:', user.uid);
                 await loadUserData();
             } else {
-                console.log('No user logged in');
+                console.log('❌ No user authenticated');
+                // Fixed: Use correct filename for redirect
                 window.location.href = 'login-responsive.html';
             }
         });
@@ -497,65 +821,77 @@
         // Load user data
         async function loadUserData() {
             try {
-                console.log('Loading user data...');
+                showLoading(true);
+                console.log('🔄 Loading user data...');
                 
+                // Get username from users collection
                 const usersRef = database.ref('users');
                 const snapshot = await usersRef.orderByChild('uid').equalTo(currentUser.uid).once('value');
                 
                 if (snapshot.exists()) {
                     const userData = Object.values(snapshot.val())[0];
                     currentUsername = userData.username;
-                    console.log('Username found:', currentUsername);
+                    console.log('✅ Username found:', currentUsername);
                     
+                    // Generate profile URL
                     const baseUrl = window.location.origin + window.location.pathname.replace('control.html', '');
                     document.getElementById('profile-url').value = `${baseUrl}view.html?user=${currentUsername}`;
                     
+                    // Load profile data
                     await loadProfile();
                 } else {
-                    console.error('User data not found');
+                    console.error('❌ User data not found in database');
                     showMessage('لم يتم العثور على بيانات المستخدم', 'error');
                 }
             } catch (error) {
-                console.error('Error loading user data:', error);
-                showMessage('خطأ في تحميل بيانات المستخدم', 'error');
+                console.error('❌ Error loading user data:', error);
+                showMessage('خطأ في تحميل بيانات المستخدم: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
             }
         }
 
-        // Load profile
+        // Load profile data
         async function loadProfile() {
             try {
-                console.log('Loading profile for:', currentUsername);
+                console.log('🔄 Loading profile for:', currentUsername);
                 
                 const profileRef = database.ref('profiles/' + currentUsername);
                 const snapshot = await profileRef.once('value');
                 
                 if (snapshot.exists()) {
                     const profileData = snapshot.val();
-                    console.log('Profile data loaded:', profileData);
+                    console.log('✅ Profile data loaded:', profileData);
                     
+                    // Fill form fields
                     document.getElementById('name').value = profileData.name || '';
                     document.getElementById('bio').value = profileData.bio || '';
                     document.getElementById('background-color').value = profileData.backgroundColor || '#667eea';
                     
+                    // Load avatar
                     if (profileData.avatar) {
-                        document.getElementById('preview-avatar').style.backgroundImage = `url("${profileData.avatar}")`;
-                        document.getElementById('preview-avatar').innerHTML = '';
+                        const avatarElement = document.getElementById('preview-avatar');
+                        avatarElement.style.backgroundImage = `url("${profileData.avatar}")`;
+                        avatarElement.innerHTML = '';
                     }
                     
+                    // Load background
                     if (profileData.backgroundImage) {
                         document.getElementById('preview-screen').style.backgroundImage = `url("${profileData.backgroundImage}")`;
                     }
                     
+                    // Load social links
                     loadSocialLinks(profileData.socialLinks || []);
-                    updatePreview();
                 } else {
-                    console.log('No profile data found, creating default');
+                    console.log('ℹ️ No profile data found, creating default');
+                    // Add default social link
                     addSocialLink();
-                    updatePreview();
                 }
+                
+                updatePreview();
             } catch (error) {
-                console.error('Error loading profile:', error);
-                showMessage('خطأ في تحميل الملف الشخصي', 'error');
+                console.error('❌ Error loading profile:', error);
+                showMessage('خطأ في تحميل الملف الشخصي: ' + error.message, 'error');
             }
         }
 
@@ -564,11 +900,12 @@
             const container = document.getElementById('social-links-container');
             container.innerHTML = '';
             
-            socialLinks.forEach((link) => {
-                addSocialLinkItem(link.platform, link.url);
-            });
-            
-            if (socialLinks.length === 0) {
+            if (socialLinks && socialLinks.length > 0) {
+                socialLinks.forEach((link) => {
+                    addSocialLinkItem(link.platform, link.url);
+                });
+            } else {
+                // Add default empty social link
                 addSocialLink();
             }
         }
@@ -584,17 +921,18 @@
             const linkItem = document.createElement('div');
             linkItem.className = 'social-link-item';
             
+            // Generate platform options
             const platformOptions = Object.keys(socialPlatforms).map(key => 
                 `<option value="${key}" ${key === platform ? 'selected' : ''}>${socialPlatforms[key].name}</option>`
             ).join('');
             
             linkItem.innerHTML = `
-                <select onchange="updatePreview()">
+                <select onchange="updatePreview()" required>
                     <option value="">اختر المنصة</option>
                     ${platformOptions}
                 </select>
-                <input type="url" placeholder="رابط المنصة" value="${url}" oninput="updatePreview()">
-                <button type="button" class="btn btn-danger" onclick="removeSocialLink(this)" style="padding: 8px 12px;">
+                <input type="url" placeholder="https://example.com/username" value="${url}" oninput="updatePreview()" required>
+                <button type="button" class="btn btn-danger" onclick="removeSocialLink(this)">
                     <i class="fas fa-trash"></i>
                 </button>
             `;
@@ -605,24 +943,29 @@
 
         // Remove social link
         function removeSocialLink(button) {
-            button.parentElement.remove();
-            updatePreview();
+            if (confirm('هل أنت متأكد من حذف هذا الرابط؟')) {
+                button.parentElement.remove();
+                updatePreview();
+            }
         }
 
         // Update preview
         function updatePreview() {
-            const name = document.getElementById('name').value || 'اسمك هنا';
-            const bio = document.getElementById('bio').value || 'نبذة تعريفية قصيرة';
+            const name = document.getElementById('name').value.trim() || 'اسمك هنا';
+            const bio = document.getElementById('bio').value.trim() || 'نبذة تعريفية مميزة وقصيرة';
             const backgroundColor = document.getElementById('background-color').value;
             
+            // Update preview content
             document.getElementById('preview-name').textContent = name;
             document.getElementById('preview-bio').textContent = bio;
             
+            // Update background color if no background image
             const previewScreen = document.getElementById('preview-screen');
-            if (!previewScreen.style.backgroundImage) {
-                previewScreen.style.background = `linear-gradient(135deg, ${backgroundColor}, ${adjustColor(backgroundColor, -20)})`;
+            if (!previewScreen.style.backgroundImage || previewScreen.style.backgroundImage === 'none') {
+                previewScreen.style.background = `linear-gradient(135deg, ${backgroundColor}, ${adjustColor(backgroundColor, -30)})`;
             }
             
+            // Update social links preview
             renderPreviewSocialLinks();
         }
 
@@ -658,36 +1001,69 @@
             const file = e.target.files[0];
             if (!file) return;
             
-            console.log('Uploading avatar:', file.name);
+            console.log('🔄 Uploading avatar:', file.name);
             
+            // Validate file
             if (file.size > 5 * 1024 * 1024) {
                 showMessage('حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت', 'error');
+                return;
+            }
+            
+            if (!file.type.startsWith('image/')) {
+                showMessage('يرجى اختيار ملف صورة صحيح', 'error');
                 return;
             }
             
             try {
                 showLoading(true);
                 
+                // Create unique filename
                 const fileName = `avatar_${Date.now()}.${file.name.split('.').pop()}`;
                 const storageRef = storage.ref(`avatars/${currentUsername}/${fileName}`);
                 
-                console.log('Uploading to:', storageRef.fullPath);
+                console.log('📤 Uploading to:', storageRef.fullPath);
                 
-                const snapshot = await storageRef.put(file);
-                const downloadURL = await snapshot.ref.getDownloadURL();
+                // Upload file
+                const uploadTask = storageRef.put(file);
                 
-                console.log('Avatar uploaded successfully:', downloadURL);
+                // Monitor upload progress
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('📊 Upload progress:', progress + '%');
+                    },
+                    (error) => {
+                        console.error('❌ Upload error:', error);
+                        showMessage('خطأ في رفع الصورة: ' + error.message, 'error');
+                        showLoading(false);
+                    },
+                    async () => {
+                        try {
+                            // Get download URL
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            console.log('✅ Avatar uploaded successfully:', downloadURL);
+                            
+                            // Update preview
+                            const avatarElement = document.getElementById('preview-avatar');
+                            avatarElement.style.backgroundImage = `url("${downloadURL}")`;
+                            avatarElement.innerHTML = '';
+                            
+                            // Save to database
+                            await database.ref(`profiles/${currentUsername}/avatar`).set(downloadURL);
+                            
+                            showMessage('تم رفع الصورة الشخصية بنجاح!', 'success');
+                        } catch (error) {
+                            console.error('❌ Error saving avatar URL:', error);
+                            showMessage('خطأ في حفظ رابط الصورة', 'error');
+                        } finally {
+                            showLoading(false);
+                        }
+                    }
+                );
                 
-                document.getElementById('preview-avatar').style.backgroundImage = `url("${downloadURL}")`;
-                document.getElementById('preview-avatar').innerHTML = '';
-                
-                await database.ref(`profiles/${currentUsername}/avatar`).set(downloadURL);
-                
-                showMessage('تم رفع الصورة الشخصية بنجاح', 'success');
             } catch (error) {
-                console.error('Error uploading avatar:', error);
+                console.error('❌ Error uploading avatar:', error);
                 showMessage('خطأ في رفع الصورة الشخصية: ' + error.message, 'error');
-            } finally {
                 showLoading(false);
             }
         });
@@ -697,35 +1073,67 @@
             const file = e.target.files[0];
             if (!file) return;
             
-            console.log('Uploading background:', file.name);
+            console.log('🔄 Uploading background:', file.name);
             
+            // Validate file
             if (file.size > 10 * 1024 * 1024) {
                 showMessage('حجم الصورة كبير جداً. الحد الأقصى 10 ميجابايت', 'error');
+                return;
+            }
+            
+            if (!file.type.startsWith('image/')) {
+                showMessage('يرجى اختيار ملف صورة صحيح', 'error');
                 return;
             }
             
             try {
                 showLoading(true);
                 
+                // Create unique filename
                 const fileName = `background_${Date.now()}.${file.name.split('.').pop()}`;
                 const storageRef = storage.ref(`backgrounds/${currentUsername}/${fileName}`);
                 
-                console.log('Uploading to:', storageRef.fullPath);
+                console.log('📤 Uploading to:', storageRef.fullPath);
                 
-                const snapshot = await storageRef.put(file);
-                const downloadURL = await snapshot.ref.getDownloadURL();
+                // Upload file
+                const uploadTask = storageRef.put(file);
                 
-                console.log('Background uploaded successfully:', downloadURL);
+                // Monitor upload progress
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('📊 Upload progress:', progress + '%');
+                    },
+                    (error) => {
+                        console.error('❌ Upload error:', error);
+                        showMessage('خطأ في رفع الصورة: ' + error.message, 'error');
+                        showLoading(false);
+                    },
+                    async () => {
+                        try {
+                            // Get download URL
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            console.log('✅ Background uploaded successfully:', downloadURL);
+                            
+                            // Update preview
+                            document.getElementById('preview-screen').style.backgroundImage = `url("${downloadURL}")`;
+                            
+                            // Save to database
+                            await database.ref(`profiles/${currentUsername}/backgroundImage`).set(downloadURL);
+                            
+                            showMessage('تم رفع صورة الخلفية بنجاح!', 'success');
+                        } catch (error) {
+                            console.error('❌ Error saving background URL:', error);
+                            showMessage('خطأ في حفظ رابط الصورة', 'error');
+                        } finally {
+                            showLoading(false);
+                        }
+                    }
+                );
                 
-                document.getElementById('preview-screen').style.backgroundImage = `url("${downloadURL}")`;
-                
-                await database.ref(`profiles/${currentUsername}/backgroundImage`).set(downloadURL);
-                
-                showMessage('تم رفع صورة الخلفية بنجاح', 'success');
             } catch (error) {
-                console.error('Error uploading background:', error);
+                console.error('❌ Error uploading background:', error);
                 showMessage('خطأ في رفع صورة الخلفية: ' + error.message, 'error');
-            } finally {
                 showLoading(false);
             }
         });
@@ -742,34 +1150,53 @@
                 return;
             }
             
-            console.log('Saving profile for:', currentUsername);
+            console.log('💾 Saving profile for:', currentUsername);
             
             try {
                 showLoading(true);
                 
+                // Get form data
                 const name = document.getElementById('name').value.trim();
                 const bio = document.getElementById('bio').value.trim();
                 const backgroundColor = document.getElementById('background-color').value;
                 
+                // Validate required fields
                 if (!name) {
                     showMessage('يرجى إدخال الاسم', 'error');
+                    showLoading(false);
                     return;
                 }
                 
+                if (!bio) {
+                    showMessage('يرجى إدخال النبذة التعريفية', 'error');
+                    showLoading(false);
+                    return;
+                }
+                
+                // Collect social links
                 const socialLinks = [];
                 const socialLinkItems = document.querySelectorAll('.social-link-item');
                 
-                socialLinkItems.forEach(item => {
+                for (let item of socialLinkItems) {
                     const select = item.querySelector('select');
                     const input = item.querySelector('input');
                     const platform = select.value;
                     const url = input.value.trim();
                     
                     if (platform && url) {
-                        socialLinks.push({ platform, url });
+                        // Validate URL
+                        try {
+                            new URL(url);
+                            socialLinks.push({ platform, url });
+                        } catch (e) {
+                            showMessage(`رابط ${socialPlatforms[platform]?.name || platform} غير صحيح`, 'error');
+                            showLoading(false);
+                            return;
+                        }
                     }
-                });
+                }
                 
+                // Prepare profile data
                 const profileData = {
                     name,
                     bio,
@@ -778,15 +1205,16 @@
                     updatedAt: firebase.database.ServerValue.TIMESTAMP
                 };
                 
-                console.log('Saving profile data:', profileData);
+                console.log('💾 Saving profile data:', profileData);
                 
+                // Save to database
                 await database.ref(`profiles/${currentUsername}`).update(profileData);
                 
-                console.log('Profile saved successfully');
-                showMessage('تم حفظ البيانات بنجاح!', 'success');
+                console.log('✅ Profile saved successfully');
+                showMessage('تم حفظ جميع البيانات بنجاح! 🎉', 'success');
                 
             } catch (error) {
-                console.error('Error saving profile:', error);
+                console.error('❌ Error saving profile:', error);
                 showMessage('حدث خطأ في حفظ البيانات: ' + error.message, 'error');
             } finally {
                 showLoading(false);
@@ -796,14 +1224,25 @@
         // Copy profile URL
         function copyProfileUrl() {
             const urlInput = document.getElementById('profile-url');
+            
+            if (!urlInput.value) {
+                showMessage('لا يوجد رابط للنسخ', 'error');
+                return;
+            }
+            
             urlInput.select();
             urlInput.setSelectionRange(0, 99999);
             
             try {
                 document.execCommand('copy');
-                showMessage('تم نسخ الرابط بنجاح!', 'success');
+                showMessage('تم نسخ الرابط بنجاح! 📋', 'success');
             } catch (error) {
-                showMessage('فشل في نسخ الرابط', 'error');
+                // Fallback for modern browsers
+                navigator.clipboard.writeText(urlInput.value).then(() => {
+                    showMessage('تم نسخ الرابط بنجاح! 📋', 'success');
+                }).catch(() => {
+                    showMessage('فشل في نسخ الرابط', 'error');
+                });
             }
         }
 
@@ -811,25 +1250,33 @@
         async function signOut() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 try {
+                    showLoading(true);
                     await auth.signOut();
+                    console.log('✅ User signed out successfully');
+                    // Fixed: Use correct filename for redirect
                     window.location.href = 'login-responsive.html';
                 } catch (error) {
-                    console.error('Error signing out:', error);
-                    showMessage('خطأ في تسجيل الخروج', 'error');
+                    console.error('❌ Error signing out:', error);
+                    showMessage('خطأ في تسجيل الخروج: ' + error.message, 'error');
+                    showLoading(false);
                 }
             }
         }
 
         // Show message
-        function showMessage(text, type) {
+        function showMessage(text, type = 'success') {
+            // Remove existing messages
+            const existingMessages = document.querySelectorAll('.message');
+            existingMessages.forEach(msg => msg.remove());
+            
             const message = document.createElement('div');
             message.className = `message ${type}`;
-            message.textContent = text;
+            message.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
             document.body.appendChild(message);
             
             setTimeout(() => {
                 message.remove();
-            }, 4000);
+            }, 5000);
         }
 
         // Show/hide loading
@@ -838,7 +1285,7 @@
             overlay.classList.toggle('show', show);
         }
 
-        // Utility function
+        // Utility function to adjust color
         function adjustColor(color, amount) {
             const usePound = color[0] === '#';
             const col = usePound ? color.slice(1) : color;
@@ -852,10 +1299,16 @@
             return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
         }
 
-        // Initialize
+        // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 App initialized');
+            
+            // Add event listeners for real-time preview
             document.getElementById('name').addEventListener('input', updatePreview);
             document.getElementById('bio').addEventListener('input', updatePreview);
+            document.getElementById('background-color').addEventListener('input', updatePreview);
+            
+            // Initialize preview
             updatePreview();
         });
     </script>
