@@ -48,7 +48,10 @@
         .logo {
             font-size: 48px;
             font-weight: 700;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
         }
 
@@ -56,6 +59,7 @@
             color: #666;
             margin-bottom: 30px;
             font-size: 16px;
+            font-weight: 400;
         }
 
         .tabs {
@@ -72,17 +76,16 @@
             -webkit-box-flex: 1;
             -ms-flex: 1;
             flex: 1;
-            padding: 12px;
-            background: transparent;
+            padding: 12px 20px;
             border: none;
+            background: transparent;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 500;
-            -webkit-transition: all 0.3s ease;
-            -o-transition: all 0.3s ease;
-            transition: all 0.3s ease;
             color: #666;
+            -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .tab.active {
@@ -110,21 +113,18 @@
             margin-bottom: 8px;
             color: #333;
             font-weight: 500;
+            font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 15px;
+            padding: 14px 16px;
             border: 2px solid #e9ecef;
             border-radius: 12px;
             font-size: 16px;
             -webkit-transition: all 0.3s ease;
-            -o-transition: all 0.3s ease;
             transition: all 0.3s ease;
             background: white;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
         }
 
         .form-group input:focus {
@@ -136,45 +136,55 @@
 
         .btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 16px;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             -webkit-transition: all 0.3s ease;
-            -o-transition: all 0.3s ease;
             transition: all 0.3s ease;
-            margin-top: 10px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+            margin-bottom: 15px;
         }
 
-        .btn:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
             -webkit-transform: translateY(-2px);
-            -ms-transform: translateY(-2px);
             transform: translateY(-2px);
             -webkit-box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
-        .btn:disabled {
+        .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             -webkit-transform: none;
-            -ms-transform: none;
             transform: none;
         }
 
+        .forgot-password {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            -webkit-transition: color 0.3s ease;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #764ba2;
+        }
+
         .message {
-            padding: 12px;
+            padding: 12px 16px;
             border-radius: 8px;
             margin-bottom: 20px;
             font-size: 14px;
-            display: none;
+            font-weight: 500;
+            text-align: center;
         }
 
         .message.success {
@@ -191,18 +201,31 @@
 
         .loading {
             display: none;
-            margin: 10px 0;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            gap: 10px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .loading.show {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
         }
 
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e9ecef;
+            border-top: 2px solid #667eea;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
             -webkit-animation: spin 1s linear infinite;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
 
         @-webkit-keyframes spin {
@@ -211,109 +234,29 @@
         }
 
         @keyframes spin {
-            0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .forgot-password {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 14px;
-            margin-top: 15px;
-            display: inline-block;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile Responsive */
+        /* Mobile optimizations */
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
             .container {
                 padding: 30px 20px;
                 margin: 10px;
-                border-radius: 15px;
             }
             
             .logo {
                 font-size: 36px;
             }
             
-            .subtitle {
-                font-size: 14px;
-            }
-            
             .form-group input {
-                padding: 12px;
                 font-size: 16px; /* Prevents zoom on iOS */
-            }
-            
-            .btn {
-                padding: 12px;
-                font-size: 16px;
-            }
-            
-            .tab {
-                font-size: 13px;
-                padding: 10px;
-            }
-        }
-
-        @media (max-width: 375px) {
-            .container {
-                padding: 25px 15px;
-            }
-            
-            .logo {
-                font-size: 32px;
-            }
-        }
-
-        /* Landscape orientation */
-        @media (max-height: 500px) and (orientation: landscape) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 20px;
-                max-width: 500px;
-            }
-            
-            .logo {
-                font-size: 32px;
-                margin-bottom: 5px;
-            }
-            
-            .subtitle {
-                margin-bottom: 20px;
-                font-size: 14px;
-            }
-            
-            .tabs {
-                margin-bottom: 20px;
-            }
-            
-            .form-group {
-                margin-bottom: 15px;
             }
         }
 
         /* Touch improvements */
-        .btn, .tab, input {
+        .btn, .tab {
             -webkit-tap-highlight-color: transparent;
-        }
-
-        /* iOS specific fixes */
-        input[type="email"],
-        input[type="password"],
-        input[type="text"] {
-            -webkit-appearance: none;
-            -webkit-border-radius: 12px;
         }
     </style>
 </head>
@@ -327,43 +270,53 @@
             <button class="tab" onclick="switchTab('signup')">إنشاء حساب</button>
         </div>
 
-        <div id="message" class="message"></div>
-        <div id="loading" class="loading">
+        <div id="message-container"></div>
+        
+        <div class="loading" id="loading">
             <div class="spinner"></div>
+            <span>جاري المعالجة...</span>
         </div>
 
-        <!-- تسجيل الدخول -->
+        <!-- Sign In Form -->
         <div id="signin-form" class="form-container active">
             <form onsubmit="signIn(event)">
                 <div class="form-group">
-                    <label>البريد الإلكتروني</label>
+                    <label for="signin-email">البريد الإلكتروني</label>
                     <input type="email" id="signin-email" required autocomplete="email">
                 </div>
+                
                 <div class="form-group">
-                    <label>كلمة المرور</label>
+                    <label for="signin-password">كلمة المرور</label>
                     <input type="password" id="signin-password" required autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn">تسجيل الدخول</button>
+                
+                <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+                
                 <a href="#" class="forgot-password" onclick="resetPassword()">نسيت كلمة المرور؟</a>
             </form>
         </div>
 
-        <!-- إنشاء حساب -->
+        <!-- Sign Up Form -->
         <div id="signup-form" class="form-container">
             <form onsubmit="signUp(event)">
                 <div class="form-group">
-                    <label>البريد الإلكتروني</label>
+                    <label for="signup-username">اسم المستخدم</label>
+                    <input type="text" id="signup-username" required autocomplete="username" 
+                           pattern="[a-zA-Z0-9_]{3,20}" title="3-20 حرف، أرقام وشرطة سفلية فقط">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">البريد الإلكتروني</label>
                     <input type="email" id="signup-email" required autocomplete="email">
                 </div>
+                
                 <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
+                    <label for="signup-password">كلمة المرور</label>
+                    <input type="password" id="signup-password" required autocomplete="new-password" 
+                           minlength="6">
                 </div>
-                <div class="form-group">
-                    <label>اسم المستخدم</label>
-                    <input type="text" id="signup-username" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" autocomplete="username">
-                </div>
-                <button type="submit" class="btn">إنشاء الحساب</button>
+                
+                <button type="submit" class="btn btn-primary">إنشاء الحساب</button>
             </form>
         </div>
     </div>
@@ -372,7 +325,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -392,41 +345,63 @@
         // Check if user is already logged in
         auth.onAuthStateChanged((user) => {
             if (user) {
+                // User is signed in, redirect to control panel
                 window.location.href = 'control.html';
             }
         });
 
-        // Switch between tabs
+        // Tab switching
         function switchTab(tab) {
             // Update tab buttons
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             
             // Update form containers
             document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-            document.getElementById(tab + '-form').classList.add('active');
+            document.getElementById(`${tab}-form`).classList.add('active');
             
             // Clear messages
             clearMessage();
         }
 
-        // Show message
+        // Message functions
         function showMessage(text, type) {
-            const messageEl = document.getElementById('message');
-            messageEl.textContent = text;
-            messageEl.className = `message ${type}`;
-            messageEl.style.display = 'block';
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="message ${type}">${text}</div>`;
         }
 
-        // Clear message
         function clearMessage() {
-            document.getElementById('message').style.display = 'none';
+            document.getElementById('message-container').innerHTML = '';
         }
 
-        // Show/hide loading
         function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-            document.querySelectorAll('.btn').forEach(btn => btn.disabled = show);
+            const loading = document.getElementById('loading');
+            const buttons = document.querySelectorAll('.btn');
+            
+            if (show) {
+                loading.classList.add('show');
+                buttons.forEach(btn => btn.disabled = true);
+            } else {
+                loading.classList.remove('show');
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        // Validate username
+        async function validateUsername(username) {
+            if (username.length < 3) {
+                throw new Error('اسم المستخدم يجب أن يكون 3 أحرف على الأقل');
+            }
+            
+            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                throw new Error('اسم المستخدم يجب أن يحتوي على أحرف وأرقام وشرطة سفلية فقط');
+            }
+            
+            // Check if username exists
+            const snapshot = await database.ref('users/' + username).once('value');
+            if (snapshot.exists()) {
+                throw new Error('اسم المستخدم مستخدم بالفعل');
+            }
         }
 
         // Sign In
@@ -442,9 +417,8 @@
             try {
                 await auth.signInWithEmailAndPassword(email, password);
                 showMessage('تم تسجيل الدخول بنجاح!', 'success');
-                setTimeout(() => {
-                    window.location.href = 'control.html';
-                }, 1000);
+                // Redirect will happen automatically via onAuthStateChanged
+                
             } catch (error) {
                 showLoading(false);
                 let errorMessage = 'حدث خطأ في تسجيل الدخول';
@@ -474,17 +448,20 @@
             
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
-            const username = document.getElementById('signup-username').value.trim();
+            const username = document.getElementById('signup-username').value.trim().toLowerCase();
             
             showLoading(true);
             clearMessage();
             
             try {
+                // Validate username first
+                await validateUsername(username);
+                
                 // Create user account
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                // Save user data
+                // Save user data in Realtime Database
                 await database.ref('users/' + username).set({
                     uid: user.uid,
                     email: email,
@@ -492,7 +469,7 @@
                     createdAt: firebase.database.ServerValue.TIMESTAMP
                 });
 
-                // Create default profile
+                // Create default profile in Realtime Database
                 await database.ref('profiles/' + username).set({
                     uid: user.uid,
                     username: username,
@@ -507,24 +484,30 @@
                 });
                 
                 showMessage('تم إنشاء الحساب بنجاح!', 'success');
+                
+                // Wait a moment then redirect
                 setTimeout(() => {
                     window.location.href = 'control.html';
-                }, 1000);
+                }, 1500);
                 
             } catch (error) {
                 showLoading(false);
                 let errorMessage = 'حدث خطأ في إنشاء الحساب';
                 
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'البريد الإلكتروني غير صحيح';
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
-                        break;
+                if (error.message && error.message.includes('اسم المستخدم')) {
+                    errorMessage = error.message;
+                } else {
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'البريد الإلكتروني غير صحيح';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
+                            break;
+                    }
                 }
                 
                 showMessage(errorMessage, 'error');
