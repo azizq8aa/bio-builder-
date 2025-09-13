@@ -15,8 +15,6 @@
         html, body {
             height: 100%;
             overflow-x: hidden;
-            position: fixed;
-            width: 100%;
             -webkit-overflow-scrolling: touch;
         }
         
@@ -24,67 +22,48 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            padding-top: 120px; /* مساحة للهيدر المثبت */
         }
         
-        .container {
-            max-width: 100%;
-            height: 100vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 20px;
-        }
-        
-        .header {
+        /* Header مثبت في الأعلى */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 15px 20px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .header h1 {
+        .fixed-header h1 {
             color: #333;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 10px;
             text-align: center;
         }
         
-        .profile-link {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: block;
-            text-align: center;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-            word-break: break-all;
-        }
-        
-        .profile-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         
         .logout-btn {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 8px 15px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
+            flex: 1;
+            font-size: 14px;
             transition: all 0.3s ease;
             -webkit-appearance: none;
             appearance: none;
@@ -93,6 +72,32 @@
         .logout-btn:hover {
             background: #c82333;
             transform: translateY(-1px);
+        }
+        
+        .profile-link {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            display: block;
+            text-align: center;
+            transition: all 0.3s ease;
+            word-break: break-all;
+            line-height: 1.2;
+        }
+        
+        .profile-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            padding-bottom: 100px; /* مساحة لزر الحفظ المثبت */
         }
         
         .form-section {
@@ -107,7 +112,7 @@
         
         .form-section h2 {
             color: #333;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
             display: flex;
@@ -214,16 +219,15 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
-            align-items: center;
+            align-items: stretch;
             background: #f8f9fa;
             padding: 15px;
             border-radius: 12px;
             position: relative;
         }
         
-        .social-link-item select,
-        .social-link-item input {
-            flex: 1;
+        .social-link-item select {
+            flex: 0 0 120px;
             padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -233,28 +237,34 @@
             background: white;
         }
         
+        .social-link-item input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+        
         .remove-link-btn {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 10px 12px;
+            padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
-            min-width: 60px;
             transition: all 0.3s ease;
             -webkit-appearance: none;
             appearance: none;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .remove-link-btn:hover {
             background: #c82333;
-            transform: translateY(-50%) scale(1.05);
+            transform: scale(1.05);
         }
         
         .add-link-btn {
@@ -275,6 +285,21 @@
         .add-link-btn:hover {
             background: #218838;
             transform: translateY(-2px);
+        }
+        
+        /* زر الحفظ مثبت في الأسفل */
+        .fixed-save-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .save-btn {
@@ -414,18 +439,7 @@
         
         /* تحسينات Safari */
         @supports (-webkit-touch-callout: none) {
-            .container {
-                height: -webkit-fill-available;
-            }
-            
-            .form-group input,
-            .form-group textarea {
-                -webkit-appearance: none;
-                border-radius: 12px;
-            }
-            
             .social-link-item select {
-                -webkit-appearance: none;
                 background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
                 background-repeat: no-repeat;
                 background-position: right 12px center;
@@ -440,7 +454,6 @@
                 padding: 10px;
             }
             
-            .header,
             .form-section,
             .preview-section {
                 padding: 15px;
@@ -464,16 +477,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Q8 Bio - لوحة التحكم</h1>
+    <!-- Header مثبت في الأعلى -->
+    <div class="fixed-header">
+        <h1>Q8 Bio - لوحة التحكم</h1>
+        <div class="header-buttons">
             <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
-            <div id="profile-link-container" style="margin-top: 15px;">
-                <div style="color: #007bff; font-weight: 600; margin-bottom: 5px;">رابط ملفك التعريفي: جاري التحميل...</div>
-            </div>
         </div>
+        <div id="profile-link-container">
+            <div style="color: #007bff; font-weight: 600; margin-bottom: 5px; font-size: 12px;">رابط ملفك التعريفي: جاري التحميل...</div>
+        </div>
+    </div>
 
+    <div class="container">
         <!-- Status Messages -->
         <div id="status-container"></div>
 
@@ -541,8 +556,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Save Button -->
+    <!-- زر الحفظ مثبت في الأسفل -->
+    <div class="fixed-save-btn">
         <button class="save-btn" onclick="saveProfile()">💾 حفظ التغييرات</button>
     </div>
 
@@ -629,16 +646,23 @@
                     document.getElementById('name').value = profileData.name || '';
                     document.getElementById('bio').value = profileData.bio || '';
                     
+                    // Load avatar
+                    if (profileData.avatar) {
+                        document.getElementById('preview-avatar').innerHTML = `<img src="${profileData.avatar}" alt="Avatar">`;
+                    }
+                    
+                    // Load background
+                    if (profileData.backgroundImage) {
+                        document.getElementById('preview-screen').style.background = `url(${profileData.backgroundImage}) center/cover`;
+                    } else if (profileData.backgroundColor) {
+                        selectColor(profileData.backgroundColor);
+                    }
+                    
                     // Load social links
                     if (profileData.socialLinks) {
                         profileData.socialLinks.forEach(link => {
                             addSocialLink(link.platform, link.url);
                         });
-                    }
-                    
-                    // Load background color
-                    if (profileData.backgroundColor) {
-                        selectColor(profileData.backgroundColor);
                     }
                 }
 
@@ -655,7 +679,7 @@
             if (currentUsername) {
                 const profileUrl = `https://azizq8aa.github.io/bio-builder-/profile.html?user=${currentUsername}`;
                 container.innerHTML = `
-                    <div style="color: #007bff; font-weight: 600; margin-bottom: 5px;">رابط ملفك التعريفي:</div>
+                    <div style="color: #007bff; font-weight: 600; margin-bottom: 5px; font-size: 12px;">رابط ملفك التعريفي:</div>
                     <a href="${profileUrl}" target="_blank" class="profile-link">${profileUrl}</a>
                 `;
             }
