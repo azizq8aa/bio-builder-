@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q8 Bio - لوحة التحكم</title>
+    <title>لوحة التحكم - Q8 Bio</title>
     <style>
         * {
             margin: 0;
@@ -13,114 +13,199 @@
         
         body {
             font-family: Arial, sans-serif;
-            background: #f0f0f0;
-            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-        
-        .header {
-            background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .header h1 {
-            color: #333;
-            margin: 0;
-        }
-        
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .logout-btn:hover {
-            background: #c82333;
         }
         
         .container {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        .form-section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
-        .preview-section {
-            position: sticky;
-            top: 20px;
-            height: fit-content;
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
         
         .profile-link {
-            background: #e3f2fd;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .upload-btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background: #0056b3;
+        }
+        
+        .color-picker-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+        
+        .social-links-section {
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
             padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #2196f3;
         }
         
-        .profile-link h3 {
-            color: #1976d2;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        .link-container {
+        .social-link-item {
             display: flex;
             gap: 10px;
+            margin-bottom: 10px;
             align-items: center;
         }
         
-        .link-input {
+        .social-link-item input {
             flex: 1;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 12px;
-            background: #f8f9fa;
         }
         
-        .copy-btn {
-            background: #2196f3;
+        .remove-link {
+            background: #dc3545;
             color: white;
             border: none;
             padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 12px;
-            white-space: nowrap;
         }
         
-        .copy-btn:hover {
-            background: #1976d2;
+        .add-link {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .save-btn {
+            background: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            float: left;
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
         }
         
         .phone-preview {
-            width: 280px;
+            width: 300px;
             height: 500px;
             background: #000;
             border-radius: 25px;
             padding: 10px;
             margin: 0 auto;
+            position: relative;
         }
         
         .phone-screen {
@@ -139,18 +224,7 @@
             padding: 20px;
         }
         
-        .status-bar {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: white;
-        }
-        
-        .profile-avatar {
+        .preview-avatar {
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -163,219 +237,86 @@
             overflow: hidden;
         }
         
-        .profile-avatar img {
+        .preview-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .profile-name {
+        .preview-name {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
-        .profile-bio {
+        .preview-bio {
             font-size: 12px;
             opacity: 0.9;
-            line-height: 1.4;
             margin-bottom: 20px;
+            line-height: 1.4;
         }
         
-        .social-links {
+        .preview-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
         }
         
-        .social-link {
+        .preview-link {
             background: rgba(255,255,255,0.2);
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 15px;
-            font-size: 11px;
+            font-size: 10px;
             text-decoration: none;
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
         }
         
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: bold;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            font-family: inherit;
-        }
-        
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        
-        .color-picker-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .color-picker {
-            width: 50px;
-            height: 40px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .color-presets {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        
-        .color-preset {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        
-        .color-preset:hover,
-        .color-preset.active {
-            border-color: #333;
-        }
-        
-        .social-links-section {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-        }
-        
-        .social-link-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        
-        .social-link-item input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        
-        .remove-link-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .add-link-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        .save-btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .save-btn:hover {
-            background: #0056b3;
-        }
-        
-        .message {
+        .status-message {
             padding: 10px;
-            margin: 10px 0;
             border-radius: 5px;
-            text-align: center;
+            margin: 10px 0;
+            display: none;
         }
         
-        .success {
+        .status-success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
         
-        .error {
+        .status-error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
         
         @media (max-width: 768px) {
-            .container {
+            .main-content {
                 grid-template-columns: 1fr;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
             }
             
             .phone-preview {
                 width: 250px;
-                height: 450px;
+                height: 400px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Q8 Bio - لوحة التحكم</h1>
-        <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
-    </div>
-    
     <div class="container">
-        <div class="form-section">
-            <div class="profile-link">
-                <h3>🔗 رابط ملفك التعريفي</h3>
-                <div class="link-container">
-                    <input type="text" id="profile-link" class="link-input" readonly>
-                    <button class="copy-btn" onclick="copyProfileLink()">نسخ</button>
-                </div>
+        <div class="header">
+            <h1>لوحة التحكم - Q8 Bio</h1>
+            <div class="profile-link" id="profile-link">
+                رابط ملفك التعريفي: <span id="profile-url">جاري التحميل...</span>
             </div>
-            
-            <div id="message"></div>
-            
-            <form onsubmit="saveProfile(event)">
-                <div class="form-group">
-                    <label>👤 المعلومات الأساسية</label>
-                </div>
-                
+            <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+        </div>
+        
+        <div class="status-message" id="status-message"></div>
+        
+        <div class="main-content">
+            <div class="form-section">
                 <div class="form-group">
                     <label>الاسم:</label>
                     <input type="text" id="name" placeholder="أدخل اسمك">
@@ -387,60 +328,57 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>📷 الصورة الشخصية</label>
-                    <input type="file" id="avatar" accept="image/*" onchange="previewAvatar()">
+                    <label>الصورة الشخصية:</label>
+                    <div class="image-upload">
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('avatar-input').click()">
+                            اختيار صورة
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="form-group">
-                    <label>🎨 الخلفية</label>
-                    <input type="file" id="background-image" accept="image/*" onchange="previewBackground()">
-                    <br><br>
-                    <label>أو اختر لون:</label>
-                    <div class="color-picker-container">
-                        <input type="color" id="background-color" class="color-picker" value="#007bff" onchange="updateBackgroundColor()">
-                        <div class="color-presets">
-                            <div class="color-preset" style="background: #007bff" onclick="setPresetColor('#007bff')"></div>
-                            <div class="color-preset" style="background: #28a745" onclick="setPresetColor('#28a745')"></div>
-                            <div class="color-preset" style="background: #dc3545" onclick="setPresetColor('#dc3545')"></div>
-                            <div class="color-preset" style="background: #ffc107" onclick="setPresetColor('#ffc107')"></div>
-                            <div class="color-preset" style="background: #6f42c1" onclick="setPresetColor('#6f42c1')"></div>
-                            <div class="color-preset" style="background: #fd7e14" onclick="setPresetColor('#fd7e14')"></div>
+                    <label>خلفية البطاقة:</label>
+                    <div class="image-upload">
+                        <input type="file" id="background-input" accept="image/*" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('background-input').click()">
+                            اختيار صورة خلفية
+                        </button>
+                        <p>أو اختر لون:</p>
+                        <div class="color-picker-container">
+                            <div class="color-option" style="background: #007bff" data-color="#007bff"></div>
+                            <div class="color-option" style="background: #28a745" data-color="#28a745"></div>
+                            <div class="color-option" style="background: #dc3545" data-color="#dc3545"></div>
+                            <div class="color-option" style="background: #ffc107" data-color="#ffc107"></div>
+                            <div class="color-option" style="background: #6f42c1" data-color="#6f42c1"></div>
+                            <div class="color-option" style="background: #fd7e14" data-color="#fd7e14"></div>
+                            <div class="color-option" style="background: #20c997" data-color="#20c997"></div>
+                            <div class="color-option" style="background: #e83e8c" data-color="#e83e8c"></div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label>🔗 الروابط الاجتماعية</label>
+                    <label>الروابط الاجتماعية:</label>
                     <div class="social-links-section">
                         <div id="social-links-container">
                             <!-- سيتم إضافة الروابط هنا -->
                         </div>
-                        <button type="button" class="add-link-btn" onclick="addSocialLink()">+ إضافة رابط جديد</button>
+                        <button class="add-link" onclick="addSocialLink()">إضافة رابط جديد</button>
                     </div>
                 </div>
                 
-                <button type="submit" class="save-btn">💾 حفظ التغييرات</button>
-            </form>
-        </div>
-        
-        <div class="preview-section">
-            <h3 style="text-align: center; margin-bottom: 15px;">معاينة مباشرة</h3>
-            <div class="phone-preview">
-                <div class="phone-screen" id="phone-screen">
-                    <div class="status-bar">
-                        <span>📶 📶 📶</span>
-                        <span>14:41</span>
-                    </div>
-                    
-                    <div class="profile-avatar" id="preview-avatar">
-                        👤
-                    </div>
-                    
-                    <div class="profile-name" id="preview-name">اسمك هنا</div>
-                    <div class="profile-bio" id="preview-bio">نبذة تعريفية قصيرة</div>
-                    
-                    <div class="social-links" id="preview-social-links">
-                        <!-- سيتم عرض الروابط هنا -->
+                <button class="save-btn" onclick="saveProfile()">حفظ التغييرات</button>
+            </div>
+            
+            <div class="preview-section">
+                <h3 style="text-align: center; margin-bottom: 20px;">معاينة البطاقة</h3>
+                <div class="phone-preview">
+                    <div class="phone-screen" id="preview-screen">
+                        <div class="preview-avatar" id="preview-avatar">👤</div>
+                        <div class="preview-name" id="preview-name">اسمك</div>
+                        <div class="preview-bio" id="preview-bio">نبذة تعريفية</div>
+                        <div class="preview-links" id="preview-links"></div>
                     </div>
                 </div>
             </div>
@@ -472,13 +410,16 @@
 
         let currentUser = null;
         let currentUsername = null;
-        let socialLinks = [];
+        let socialLinksCount = 0;
+        let selectedColor = '#007bff';
+        let avatarFile = null;
+        let backgroundFile = null;
 
         // التحقق من تسجيل الدخول
-        auth.onAuthStateChanged(async (user) => {
+        auth.onAuthStateChanged(user => {
             if (user) {
                 currentUser = user;
-                await loadUserData();
+                loadUserData();
             } else {
                 window.location.href = 'index.html';
             }
@@ -487,233 +428,247 @@
         // تحميل بيانات المستخدم
         async function loadUserData() {
             try {
-                // البحث عن اسم المستخدم
-                const usersSnapshot = await database.ref('users').orderByChild('uid').equalTo(currentUser.uid).once('value');
-                const userData = usersSnapshot.val();
+                const userSnapshot = await database.ref('users/' + currentUser.uid).once('value');
+                const userData = userSnapshot.val();
                 
-                if (userData) {
-                    currentUsername = Object.keys(userData)[0];
-                    
-                    // تحديث رابط الملف التعريفي
-                    const profileLink = `${window.location.origin}/profile.html?user=${currentUsername}`;
-                    document.getElementById('profile-link').value = profileLink;
+                if (userData && userData.username) {
+                    currentUsername = userData.username;
+                    document.getElementById('profile-url').textContent = 
+                        `https://azizq8aa.github.io/bio-builder-/profile.html?user=${currentUsername}`;
                     
                     // تحميل بيانات الملف التعريفي
                     const profileSnapshot = await database.ref('profiles/' + currentUsername).once('value');
                     const profileData = profileSnapshot.val();
                     
                     if (profileData) {
-                        document.getElementById('name').value = profileData.name || '';
-                        document.getElementById('bio').value = profileData.bio || '';
-                        document.getElementById('background-color').value = profileData.backgroundColor || '#007bff';
-                        
-                        socialLinks = profileData.socialLinks || [];
-                        renderSocialLinks();
+                        populateForm(profileData);
                         updatePreview();
                     }
                 }
             } catch (error) {
                 console.error('Error loading user data:', error);
-                showMessage('حدث خطأ في تحميل البيانات', 'error');
+                showStatus('خطأ في تحميل البيانات', 'error');
             }
         }
 
-        // عرض الرسائل
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
-            setTimeout(() => {
-                messageDiv.innerHTML = '';
-            }, 5000);
-        }
-
-        // نسخ رابط الملف التعريفي
-        function copyProfileLink() {
-            const linkInput = document.getElementById('profile-link');
-            linkInput.select();
-            document.execCommand('copy');
-            showMessage('تم نسخ الرابط بنجاح!', 'success');
-        }
-
-        // إضافة رابط اجتماعي
-        function addSocialLink() {
-            socialLinks.push({ name: '', url: '' });
-            renderSocialLinks();
-        }
-
-        // حذف رابط اجتماعي
-        function removeSocialLink(index) {
-            socialLinks.splice(index, 1);
-            renderSocialLinks();
-            updatePreview();
-        }
-
-        // عرض الروابط الاجتماعية
-        function renderSocialLinks() {
-            const container = document.getElementById('social-links-container');
-            container.innerHTML = '';
+        // ملء النموذج بالبيانات المحفوظة
+        function populateForm(data) {
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('bio').value = data.bio || '';
             
-            socialLinks.forEach((link, index) => {
-                const linkDiv = document.createElement('div');
-                linkDiv.className = 'social-link-item';
-                linkDiv.innerHTML = `
-                    <input type="text" placeholder="اسم الرابط (مثل: تويتر)" value="${link.name}" 
-                           onchange="updateSocialLink(${index}, 'name', this.value)">
-                    <input type="url" placeholder="https://..." value="${link.url}" 
-                           onchange="updateSocialLink(${index}, 'url', this.value)">
-                    <button type="button" class="remove-link-btn" onclick="removeSocialLink(${index})">حذف</button>
-                `;
-                container.appendChild(linkDiv);
+            if (data.backgroundColor) {
+                selectedColor = data.backgroundColor;
+                updateColorSelection();
+            }
+            
+            if (data.socialLinks) {
+                data.socialLinks.forEach(link => {
+                    addSocialLink(link.name, link.url);
+                });
+            }
+        }
+
+        // تحديث اختيار اللون
+        function updateColorSelection() {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === selectedColor) {
+                    option.classList.add('selected');
+                }
             });
         }
 
-        // تحديث رابط اجتماعي
-        function updateSocialLink(index, field, value) {
-            socialLinks[index][field] = value;
-            updatePreview();
-        }
+        // معالجة اختيار الألوان
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                selectedColor = option.dataset.color;
+                updateColorSelection();
+                updatePreview();
+            });
+        });
 
-        // تحديث لون الخلفية
-        function updateBackgroundColor() {
-            const color = document.getElementById('background-color').value;
-            updatePreview();
-        }
-
-        // تعيين لون محدد مسبقاً
-        function setPresetColor(color) {
-            document.getElementById('background-color').value = color;
-            updateBackgroundColor();
-        }
-
-        // معاينة الصورة الشخصية
-        function previewAvatar() {
-            const file = document.getElementById('avatar').files[0];
+        // معالجة رفع الصورة الشخصية
+        document.getElementById('avatar-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
             if (file) {
+                avatarFile = file;
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview-avatar').innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                reader.onload = (e) => {
+                    document.getElementById('preview-avatar').innerHTML = 
+                        `<img src="${e.target.result}" alt="Avatar">`;
                 };
                 reader.readAsDataURL(file);
             }
-        }
+        });
 
-        // معاينة صورة الخلفية
-        function previewBackground() {
-            const file = document.getElementById('background-image').files[0];
+        // معالجة رفع صورة الخلفية
+        document.getElementById('background-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
             if (file) {
+                backgroundFile = file;
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('phone-screen').style.background = `url(${e.target.result}) center/cover`;
+                reader.onload = (e) => {
+                    document.getElementById('preview-screen').style.background = 
+                        `url(${e.target.result}) center/cover`;
                 };
                 reader.readAsDataURL(file);
             }
+        });
+
+        // إضافة رابط اجتماعي
+        function addSocialLink(name = '', url = '') {
+            socialLinksCount++;
+            const container = document.getElementById('social-links-container');
+            const linkDiv = document.createElement('div');
+            linkDiv.className = 'social-link-item';
+            linkDiv.innerHTML = `
+                <input type="text" placeholder="اسم الرابط" value="${name}" onchange="updatePreview()">
+                <input type="url" placeholder="https://example.com" value="${url}" onchange="updatePreview()">
+                <button class="remove-link" onclick="removeSocialLink(this)">حذف</button>
+            `;
+            container.appendChild(linkDiv);
+            updatePreview();
+        }
+
+        // حذف رابط اجتماعي
+        function removeSocialLink(button) {
+            button.parentElement.remove();
+            updatePreview();
         }
 
         // تحديث المعاينة
         function updatePreview() {
-            const name = document.getElementById('name').value || 'اسمك هنا';
-            const bio = document.getElementById('bio').value || 'نبذة تعريفية قصيرة';
-            const backgroundColor = document.getElementById('background-color').value;
+            const name = document.getElementById('name').value || 'اسمك';
+            const bio = document.getElementById('bio').value || 'نبذة تعريفية';
             
             document.getElementById('preview-name').textContent = name;
             document.getElementById('preview-bio').textContent = bio;
             
-            // تحديث لون الخلفية إذا لم تكن هناك صورة خلفية
-            if (!document.getElementById('background-image').files[0]) {
-                document.getElementById('phone-screen').style.background = `linear-gradient(135deg, ${backgroundColor}, ${backgroundColor}dd)`;
+            // تحديث الخلفية
+            if (!backgroundFile) {
+                document.getElementById('preview-screen').style.background = 
+                    `linear-gradient(135deg, ${selectedColor}, ${selectedColor}dd)`;
             }
             
-            // تحديث الروابط الاجتماعية
-            const socialLinksContainer = document.getElementById('preview-social-links');
-            socialLinksContainer.innerHTML = '';
+            // تحديث الروابط
+            const linksContainer = document.getElementById('preview-links');
+            linksContainer.innerHTML = '';
             
-            socialLinks.forEach(link => {
-                if (link.name && link.url) {
+            document.querySelectorAll('.social-link-item').forEach(item => {
+                const inputs = item.querySelectorAll('input');
+                const name = inputs[0].value;
+                const url = inputs[1].value;
+                
+                if (name && url) {
                     const linkElement = document.createElement('a');
-                    linkElement.className = 'social-link';
-                    linkElement.textContent = link.name;
-                    linkElement.href = link.url;
+                    linkElement.className = 'preview-link';
+                    linkElement.textContent = name;
+                    linkElement.href = url;
                     linkElement.target = '_blank';
-                    socialLinksContainer.appendChild(linkElement);
+                    linksContainer.appendChild(linkElement);
                 }
             });
         }
 
+        // رفع الصورة إلى Firebase Storage
+        async function uploadImage(file, path) {
+            try {
+                const storageRef = storage.ref(path);
+                const snapshot = await storageRef.put(file);
+                const downloadURL = await snapshot.ref.getDownloadURL();
+                return downloadURL;
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                throw error;
+            }
+        }
+
         // حفظ الملف التعريفي
-        async function saveProfile(event) {
-            event.preventDefault();
-            
+        async function saveProfile() {
             if (!currentUsername) {
-                showMessage('حدث خطأ: لم يتم العثور على اسم المستخدم', 'error');
+                showStatus('خطأ: لم يتم العثور على اسم المستخدم', 'error');
                 return;
             }
-            
+
             try {
-                showMessage('جاري الحفظ...', 'success');
+                showStatus('جاري الحفظ...', 'success');
                 
-                const name = document.getElementById('name').value;
-                const bio = document.getElementById('bio').value;
-                const backgroundColor = document.getElementById('background-color').value;
-                
-                let avatarUrl = '';
-                let backgroundImageUrl = '';
-                
-                // رفع الصورة الشخصية
-                const avatarFile = document.getElementById('avatar').files[0];
-                if (avatarFile) {
-                    const avatarRef = storage.ref(`avatars/${currentUsername}/${Date.now()}_${avatarFile.name}`);
-                    const avatarSnapshot = await avatarRef.put(avatarFile);
-                    avatarUrl = await avatarSnapshot.ref.getDownloadURL();
-                }
-                
-                // رفع صورة الخلفية
-                const backgroundFile = document.getElementById('background-image').files[0];
-                if (backgroundFile) {
-                    const backgroundRef = storage.ref(`backgrounds/${currentUsername}/${Date.now()}_${backgroundFile.name}`);
-                    const backgroundSnapshot = await backgroundRef.put(backgroundFile);
-                    backgroundImageUrl = await backgroundSnapshot.ref.getDownloadURL();
-                }
-                
-                // حفظ البيانات في قاعدة البيانات
                 const profileData = {
+                    name: document.getElementById('name').value,
+                    bio: document.getElementById('bio').value,
+                    backgroundColor: selectedColor,
+                    socialLinks: [],
                     uid: currentUser.uid,
-                    username: currentUsername,
-                    name: name,
-                    bio: bio,
-                    backgroundColor: backgroundColor,
-                    socialLinks: socialLinks.filter(link => link.name && link.url),
-                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                    username: currentUsername
                 };
+
+                // جمع الروابط الاجتماعية
+                document.querySelectorAll('.social-link-item').forEach(item => {
+                    const inputs = item.querySelectorAll('input');
+                    const name = inputs[0].value.trim();
+                    const url = inputs[1].value.trim();
+                    
+                    if (name && url) {
+                        profileData.socialLinks.push({ name, url });
+                    }
+                });
+
+                // رفع الصورة الشخصية
+                if (avatarFile) {
+                    const avatarPath = `avatars/${currentUsername}/${Date.now()}_${avatarFile.name}`;
+                    profileData.avatar = await uploadImage(avatarFile, avatarPath);
+                }
+
+                // رفع صورة الخلفية
+                if (backgroundFile) {
+                    const backgroundPath = `backgrounds/${currentUsername}/${Date.now()}_${backgroundFile.name}`;
+                    profileData.backgroundImage = await uploadImage(backgroundFile, backgroundPath);
+                    delete profileData.backgroundColor; // استخدام الصورة بدلاً من اللون
+                }
+
+                // حفظ البيانات في قاعدة البيانات
+                await database.ref('profiles/' + currentUsername).set(profileData);
                 
-                if (avatarUrl) profileData.avatar = avatarUrl;
-                if (backgroundImageUrl) profileData.backgroundImage = backgroundImageUrl;
+                showStatus('تم حفظ التغييرات بنجاح!', 'success');
                 
-                await database.ref('profiles/' + currentUsername).update(profileData);
-                
-                showMessage('تم حفظ التغييرات بنجاح!', 'success');
+                // إعادة تعيين متغيرات الملفات
+                avatarFile = null;
+                backgroundFile = null;
                 
             } catch (error) {
                 console.error('Error saving profile:', error);
-                showMessage('حدث خطأ في حفظ البيانات', 'error');
+                showStatus('خطأ في حفظ التغييرات: ' + error.message, 'error');
             }
+        }
+
+        // عرض رسالة الحالة
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = `status-message status-${type}`;
+            statusElement.style.display = 'block';
+            
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 5000);
         }
 
         // تسجيل الخروج
         function logout() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                auth.signOut().then(() => {
-                    window.location.href = 'index.html';
-                }).catch((error) => {
-                    console.error('Logout error:', error);
-                    showMessage('حدث خطأ في تسجيل الخروج', 'error');
-                });
-            }
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+                showStatus('خطأ في تسجيل الخروج', 'error');
+            });
         }
 
         // تحديث المعاينة عند تغيير النصوص
         document.getElementById('name').addEventListener('input', updatePreview);
         document.getElementById('bio').addEventListener('input', updatePreview);
-        document.getElementById('background-color').addEventListener('change', updatePreview);
+
+        // تحديث المعاينة عند تحميل الصفحة
+        window.addEventListener('load', updatePreview);
     </script>
 </body>
 </html>
