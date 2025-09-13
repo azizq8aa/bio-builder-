@@ -428,26 +428,41 @@
         // تحميل بيانات المستخدم
         async function loadUserData() {
             try {
+                // أولاً: محاولة العثور على اسم المستخدم من جدول users
                 const userSnapshot = await database.ref('users/' + currentUser.uid).once('value');
                 const userData = userSnapshot.val();
                 
                 if (userData && userData.username) {
                     currentUsername = userData.username;
-                    document.getElementById('profile-url').textContent = 
-                        `https://azizq8aa.github.io/bio-builder-/profile.html?user=${currentUsername}`;
+                } else {
+                    // إذا لم يتم العثور على اسم المستخدم، استخدم UID كاسم مستخدم
+                    currentUsername = currentUser.uid.substring(0, 8); // أول 8 أحرف من UID
                     
-                    // تحميل بيانات الملف التعريفي
-                    const profileSnapshot = await database.ref('profiles/' + currentUsername).once('value');
-                    const profileData = profileSnapshot.val();
-                    
-                    if (profileData) {
-                        populateForm(profileData);
-                        updatePreview();
-                    }
+                    // حفظ اسم المستخدم الجديد
+                    await database.ref('users/' + currentUser.uid).set({
+                        username: currentUsername,
+                        email: currentUser.email,
+                        uid: currentUser.uid
+                    });
                 }
+                
+                // تحديث رابط الملف التعريفي
+                document.getElementById('profile-url').textContent = 
+                    `https://azizq8aa.github.io/bio-builder-/profile.html?user=${currentUsername}`;
+                
+                // تحميل بيانات الملف التعريفي إذا كانت موجودة
+                const profileSnapshot = await database.ref('profiles/' + currentUsername).once('value');
+                const profileData = profileSnapshot.val();
+                
+                if (profileData) {
+                    populateForm(profileData);
+                }
+                
+                updatePreview();
+                
             } catch (error) {
                 console.error('Error loading user data:', error);
-                showStatus('خطأ في تحميل البيانات', 'error');
+                showStatus('خطأ في تحميل البيانات: ' + error.message, 'error');
             }
         }
 
@@ -465,6 +480,18 @@
                 data.socialLinks.forEach(link => {
                     addSocialLink(link.name, link.url);
                 });
+            }
+            
+            // تحديث الصورة الشخصية في المعاينة
+            if (data.avatar) {
+                document.getElementById('preview-avatar').innerHTML = 
+                    `<img src="${data.avatar}" alt="Avatar">`;
+            }
+            
+            // تحديث الخلفية في المعاينة
+            if (data.backgroundImage) {
+                document.getElementById('preview-screen').style.background = 
+                    `url(${data.backgroundImage}) center/cover`;
             }
         }
 
