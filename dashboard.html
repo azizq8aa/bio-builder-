@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q8 Bio - لوحة التحكم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        
+        .editor {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .preview {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .file-input {
+            margin-bottom: 10px;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .color-input {
+            width: 50px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .color-presets {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .color-preset {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-preset:hover {
+            border-color: #333;
+        }
+        
+        .social-links {
+            margin-bottom: 15px;
+        }
+        
+        .social-link {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .social-link select {
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .social-link input {
+            flex: 1;
+            padding: 8px;
+        }
+        
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .save-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .phone-preview {
+            width: 250px;
+            height: 500px;
+            background: #333;
+            border-radius: 25px;
+            padding: 20px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #007bff;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .preview-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .preview-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .preview-bio {
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .preview-social {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .preview-social-link {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        
+        .url-section {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .url-display {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .url-input {
+            flex: 1;
+            background: white;
+        }
+        
+        .copy-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-preview {
+                width: 200px;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>لوحة التحكم - Q8 Bio</h1>
+        <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+    </div>
+    
+    <div id="message"></div>
+    
+    <div class="main-content">
+        <div class="editor">
+            <!-- رابط الملف التعريفي -->
+            <div class="url-section">
+                <h3>رابط ملفك التعريفي</h3>
+                <div class="url-display">
+                    <input type="text" id="profile-url" class="url-input" readonly>
+                    <button class="copy-btn" onclick="copyUrl()">نسخ</button>
+                </div>
+            </div>
+            
+            <!-- المعلومات الأساسية -->
+            <div class="section">
+                <h3>المعلومات الأساسية</h3>
+                <div class="form-group">
+                    <label>الاسم:</label>
+                    <input type="text" id="name" placeholder="أدخل اسمك" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>النبذة التعريفية:</label>
+                    <textarea id="bio" placeholder="اكتب نبذة قصيرة عنك" oninput="updatePreview()"></textarea>
+                </div>
+            </div>
+            
+            <!-- الصورة الشخصية -->
+            <div class="section">
+                <h3>الصورة الشخصية</h3>
+                <div class="form-group">
+                    <input type="file" id="avatar-input" class="file-input" accept="image/*" onchange="uploadAvatar()">
+                </div>
+            </div>
+            
+            <!-- الخلفية -->
+            <div class="section">
+                <h3>الخلفية</h3>
+                <div class="form-group">
+                    <label>صورة الخلفية:</label>
+                    <input type="file" id="background-input" class="file-input" accept="image/*" onchange="uploadBackground()">
+                </div>
+                <div class="form-group">
+                    <label>أو اختر لون:</label>
+                    <div class="color-picker">
+                        <input type="color" id="background-color" class="color-input" value="#007bff" onchange="updateBackgroundColor()">
+                        <div class="color-presets">
+                            <div class="color-preset" style="background: #007bff" onclick="setColor('#007bff')"></div>
+                            <div class="color-preset" style="background: #28a745" onclick="setColor('#28a745')"></div>
+                            <div class="color-preset" style="background: #dc3545" onclick="setColor('#dc3545')"></div>
+                            <div class="color-preset" style="background: #ffc107" onclick="setColor('#ffc107')"></div>
+                            <div class="color-preset" style="background: #6f42c1" onclick="setColor('#6f42c1')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- الروابط الاجتماعية -->
+            <div class="section">
+                <h3>الروابط الاجتماعية</h3>
+                <div id="social-links-container"></div>
+                <button class="add-btn" onclick="addSocialLink()">إضافة رابط</button>
+            </div>
+            
+            <!-- حفظ -->
+            <div class="section">
+                <button class="save-btn" onclick="saveProfile()">حفظ التغييرات</button>
+            </div>
+        </div>
+        
+        <div class="preview">
+            <h3>معاينة مباشرة</h3>
+            <div class="phone-preview">
+                <div class="phone-screen" id="phone-screen">
+                    <div class="preview-avatar" id="preview-avatar">👤</div>
+                    <div class="preview-name" id="preview-name">اسمك هنا</div>
+                    <div class="preview-bio" id="preview-bio">نبذة تعريفية قصيرة</div>
+                    <div class="preview-social" id="preview-social"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
+            authDomain: "bio-builder-new.firebaseapp.com",
+            databaseURL: "https://bio-builder-new-default-rtdb.firebaseio.com",
+            projectId: "bio-builder-new",
+            storageBucket: "bio-builder-new.firebasestorage.app",
+            messagingSenderId: "618331429708",
+            appId: "1:618331429708:web:4357af8958ac90a67d0de9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+
+        let currentUser = null;
+        let currentUsername = null;
+        let socialLinks = [];
+
+        // التحقق من تسجيل الدخول
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+            } else {
+                window.location.href = 'simple_index.html';
+            }
+        });
+
+        // تحميل بيانات المستخدم
+        async function loadUserData() {
+            try {
+                // البحث عن اسم المستخدم
+                const usersRef = database.ref('users');
+                const snapshot = await usersRef.orderByChild('uid').equalTo(currentUser.uid).once('value');
+                
+                if (snapshot.exists()) {
+                    const userData = Object.values(snapshot.val())[0];
+                    currentUsername = userData.username;
+                    
+                    // تحديث رابط الملف التعريفي
+                    updateProfileUrl();
+                    
+                    // تحميل بيانات الملف التعريفي
+                    const profileRef = database.ref('profiles/' + currentUsername);
+                    const profileSnapshot = await profileRef.once('value');
+                    
+                    if (profileSnapshot.exists()) {
+                        const profileData = profileSnapshot.val();
+                        populateForm(profileData);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showMessage('حدث خطأ في تحميل البيانات', 'error');
+            }
+        }
+
+        // ملء النموذج بالبيانات
+        function populateForm(data) {
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('bio').value = data.bio || '';
+            
+            if (data.backgroundColor) {
+                document.getElementById('background-color').value = data.backgroundColor;
+                updateBackgroundColor();
+            }
+            
+            if (data.avatar) {
+                updateAvatarPreview(data.avatar);
+            }
+            
+            if (data.backgroundImage) {
+                updateBackgroundPreview(data.backgroundImage);
+            }
+            
+            socialLinks = data.socialLinks || [];
+            renderSocialLinks();
+            updatePreview();
+        }
+
+        // تحديث رابط الملف التعريفي
+        function updateProfileUrl() {
+            const url = `${window.location.origin}/simple_profile.html?user=${currentUsername}`;
+            document.getElementById('profile-url').value = url;
+        }
+
+        // نسخ الرابط
+        function copyUrl() {
+            const urlInput = document.getElementById('profile-url');
+            urlInput.select();
+            document.execCommand('copy');
+            showMessage('تم نسخ الرابط!', 'success');
+        }
+
+        // رفع الصورة الشخصية
+        async function uploadAvatar() {
+            const file = document.getElementById('avatar-input').files[0];
+            if (!file) return;
+            
+            try {
+                const storageRef = storage.ref(`avatars/${currentUsername}/${Date.now()}_${file.name}`);
+                const uploadTask = await storageRef.put(file);
+                const downloadURL = await uploadTask.ref.getDownloadURL();
+                
+                updateAvatarPreview(downloadURL);
+                showMessage('تم رفع الصورة الشخصية بنجاح', 'success');
+            } catch (error) {
+                console.error('Error uploading avatar:', error);
+                showMessage('حدث خطأ في رفع الصورة', 'error');
+            }
+        }
+
+        // رفع صورة الخلفية
+        async function uploadBackground() {
+            const file = document.getElementById('background-input').files[0];
+            if (!file) return;
+            
+            try {
+                const storageRef = storage.ref(`backgrounds/${currentUsername}/${Date.now()}_${file.name}`);
+                const uploadTask = await storageRef.put(file);
+                const downloadURL = await uploadTask.ref.getDownloadURL();
+                
+                updateBackgroundPreview(downloadURL);
+                showMessage('تم رفع صورة الخلفية بنجاح', 'success');
+            } catch (error) {
+                console.error('Error uploading background:', error);
+                showMessage('حدث خطأ في رفع الصورة', 'error');
+            }
+        }
+
+        // تحديث معاينة الصورة الشخصية
+        function updateAvatarPreview(imageUrl) {
+            const avatar = document.getElementById('preview-avatar');
+            if (imageUrl) {
+                avatar.style.backgroundImage = `url(${imageUrl})`;
+                avatar.textContent = '';
+            } else {
+                avatar.style.backgroundImage = '';
+                avatar.textContent = '👤';
+            }
+        }
+
+        // تحديث معاينة الخلفية
+        function updateBackgroundPreview(imageUrl) {
+            const screen = document.getElementById('phone-screen');
+            if (imageUrl) {
+                screen.style.backgroundImage = `url(${imageUrl})`;
+            }
+        }
+
+        // تحديث لون الخلفية
+        function updateBackgroundColor() {
+            const color = document.getElementById('background-color').value;
+            const screen = document.getElementById('phone-screen');
+            screen.style.background = color;
+            screen.style.backgroundImage = '';
+        }
+
+        // تعيين لون محدد
+        function setColor(color) {
+            document.getElementById('background-color').value = color;
+            updateBackgroundColor();
+        }
+
+        // إضافة رابط اجتماعي
+        function addSocialLink() {
+            socialLinks.push({ platform: 'instagram', url: '' });
+            renderSocialLinks();
+        }
+
+        // حذف رابط اجتماعي
+        function removeSocialLink(index) {
+            socialLinks.splice(index, 1);
+            renderSocialLinks();
+            updatePreview();
+        }
+
+        // عرض الروابط الاجتماعية
+        function renderSocialLinks() {
+            const container = document.getElementById('social-links-container');
+            container.innerHTML = '';
+            
+            socialLinks.forEach((link, index) => {
+                const linkDiv = document.createElement('div');
+                linkDiv.className = 'social-link';
+                linkDiv.innerHTML = `
+                    <select onchange="updateSocialPlatform(${index}, this.value)">
+                        <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                        <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter</option>
+                        <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                        <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                        <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                        <option value="website" ${link.platform === 'website' ? 'selected' : ''}>موقع ويب</option>
+                    </select>
+                    <input type="url" placeholder="رابط الحساب" value="${link.url}" 
+                           onchange="updateSocialUrl(${index}, this.value)">
+                    <button class="remove-btn" onclick="removeSocialLink(${index})">حذف</button>
+                `;
+                container.appendChild(linkDiv);
+            });
+        }
+
+        // تحديث منصة التواصل
+        function updateSocialPlatform(index, platform) {
+            socialLinks[index].platform = platform;
+            updatePreview();
+        }
+
+        // تحديث رابط التواصل
+        function updateSocialUrl(index, url) {
+            socialLinks[index].url = url;
+            updatePreview();
+        }
+
+        // تحديث المعاينة
+        function updatePreview() {
+            const name = document.getElementById('name').value || 'اسمك هنا';
+            const bio = document.getElementById('bio').value || 'نبذة تعريفية قصيرة';
+            
+            document.getElementById('preview-name').textContent = name;
+            document.getElementById('preview-bio').textContent = bio;
+            
+            // تحديث الروابط الاجتماعية
+            const socialContainer = document.getElementById('preview-social');
+            socialContainer.innerHTML = '';
+            
+            socialLinks.forEach(link => {
+                if (link.url) {
+                    const linkDiv = document.createElement('div');
+                    linkDiv.className = 'preview-social-link';
+                    linkDiv.textContent = link.platform.charAt(0).toUpperCase() + link.platform.slice(1);
+                    socialContainer.appendChild(linkDiv);
+                }
+            });
+        }
+
+        // حفظ الملف التعريفي
+        async function saveProfile() {
+            if (!currentUsername) {
+                showMessage('خطأ: لم يتم العثور على اسم المستخدم', 'error');
+                return;
+            }
+            
+            const name = document.getElementById('name').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+            const backgroundColor = document.getElementById('background-color').value;
+            
+            try {
+                // الحصول على البيانات الحالية
+                const currentProfileRef = database.ref(`profiles/${currentUsername}`);
+                const currentSnapshot = await currentProfileRef.once('value');
+                const currentData = currentSnapshot.val() || {};
+                
+                // إعداد البيانات الجديدة
+                const profileData = {
+                    uid: currentUser.uid,
+                    username: currentUsername,
+                    name: name,
+                    bio: bio,
+                    avatar: currentData.avatar || '',
+                    backgroundColor: backgroundColor,
+                    backgroundImage: currentData.backgroundImage || '',
+                    socialLinks: socialLinks.filter(link => link.url),
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                };
+                
+                if (!currentData.createdAt) {
+                    profileData.createdAt = firebase.database.ServerValue.TIMESTAMP;
+                }
+                
+                // حفظ البيانات
+                await currentProfileRef.set(profileData);
+                
+                showMessage('تم حفظ البيانات بنجاح!', 'success');
+                
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showMessage('حدث خطأ في حفظ البيانات', 'error');
+            }
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                auth.signOut();
+            }
+        }
+
+        // عرض الرسائل
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        // تحديث المعاينة عند تحميل الصفحة
+        updatePreview();
+    </script>
+</body>
+</html>
