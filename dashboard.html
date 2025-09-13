@@ -414,6 +414,8 @@
         let selectedColor = '#007bff';
         let avatarFile = null;
         let backgroundFile = null;
+        let currentAvatarUrl = null;
+        let currentBackgroundUrl = null;
 
         // التحقق من تسجيل الدخول
         auth.onAuthStateChanged(user => {
@@ -484,12 +486,14 @@
             
             // تحديث الصورة الشخصية في المعاينة
             if (data.avatar) {
+                currentAvatarUrl = data.avatar;
                 document.getElementById('preview-avatar').innerHTML = 
                     `<img src="${data.avatar}" alt="Avatar">`;
             }
             
             // تحديث الخلفية في المعاينة
             if (data.backgroundImage) {
+                currentBackgroundUrl = data.backgroundImage;
                 document.getElementById('preview-screen').style.background = 
                     `url(${data.backgroundImage}) center/cover`;
             }
@@ -510,6 +514,9 @@
             option.addEventListener('click', () => {
                 selectedColor = option.dataset.color;
                 updateColorSelection();
+                // إزالة صورة الخلفية عند اختيار لون
+                backgroundFile = null;
+                currentBackgroundUrl = null;
                 updatePreview();
             });
         });
@@ -572,7 +579,7 @@
             document.getElementById('preview-bio').textContent = bio;
             
             // تحديث الخلفية
-            if (!backgroundFile) {
+            if (!backgroundFile && !currentBackgroundUrl) {
                 document.getElementById('preview-screen').style.background = 
                     `linear-gradient(135deg, ${selectedColor}, ${selectedColor}dd)`;
             }
@@ -640,17 +647,24 @@
                     }
                 });
 
-                // رفع الصورة الشخصية
+                // رفع الصورة الشخصية الجديدة أو استخدام الموجودة
                 if (avatarFile) {
                     const avatarPath = `avatars/${currentUsername}/${Date.now()}_${avatarFile.name}`;
                     profileData.avatar = await uploadImage(avatarFile, avatarPath);
+                    currentAvatarUrl = profileData.avatar;
+                } else if (currentAvatarUrl) {
+                    profileData.avatar = currentAvatarUrl;
                 }
 
-                // رفع صورة الخلفية
+                // رفع صورة الخلفية الجديدة أو استخدام الموجودة
                 if (backgroundFile) {
                     const backgroundPath = `backgrounds/${currentUsername}/${Date.now()}_${backgroundFile.name}`;
                     profileData.backgroundImage = await uploadImage(backgroundFile, backgroundPath);
+                    currentBackgroundUrl = profileData.backgroundImage;
                     delete profileData.backgroundColor; // استخدام الصورة بدلاً من اللون
+                } else if (currentBackgroundUrl) {
+                    profileData.backgroundImage = currentBackgroundUrl;
+                    delete profileData.backgroundColor;
                 }
 
                 // حفظ البيانات في قاعدة البيانات
@@ -658,7 +672,7 @@
                 
                 showStatus('تم حفظ التغييرات بنجاح!', 'success');
                 
-                // إعادة تعيين متغيرات الملفات
+                // إعادة تعيين متغيرات الملفات الجديدة فقط
                 avatarFile = null;
                 backgroundFile = null;
                 
