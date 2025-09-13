@@ -918,11 +918,14 @@
             reader.onload = function(e) {
                 const preview = document.getElementById('background-preview');
                 preview.src = e.target.result;
+                
+                // تحديث الخلفية المخصصة
                 customBackgroundImage = e.target.result;
                 
-                // Clear color selection
+                // إزالة تحديد الألوان
                 document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
                 
+                // تحديث المعاينة فوراً
                 updatePreview();
             };
             reader.readAsDataURL(file);
@@ -935,15 +938,51 @@
             document.getElementById('preview-name').textContent = name;
             document.getElementById('preview-bio').textContent = bio;
             
-            // Update background
+            // تحديث الخلفية
             const screen = document.getElementById('preview-screen');
+            
             if (customBackgroundImage) {
+                // خلفية مخصصة
                 screen.style.backgroundImage = `url(${customBackgroundImage})`;
                 screen.style.backgroundSize = 'cover';
                 screen.style.backgroundPosition = 'center';
+                screen.style.backgroundRepeat = 'no-repeat';
                 screen.style.background = 'none';
                 screen.style.color = 'white';
+                
+                // إضافة طبقة شفافة للنص
+                screen.style.position = 'relative';
+                if (!screen.querySelector('.overlay')) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    overlay.style.cssText = `
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0,0,0,0.3);
+                        z-index: 1;
+                    `;
+                    screen.appendChild(overlay);
+                }
+                
+                // رفع z-index للمحتوى
+                const children = screen.children;
+                for (let i = 0; i < children.length; i++) {
+                    if (!children[i].classList.contains('overlay')) {
+                        children[i].style.position = 'relative';
+                        children[i].style.zIndex = '2';
+                    }
+                }
             } else {
+                // إزالة الطبقة الشفافة
+                const overlay = screen.querySelector('.overlay');
+                if (overlay) {
+                    overlay.remove();
+                }
+                
+                // خلفية ملونة
                 screen.style.backgroundImage = 'none';
                 if (selectedBackgroundColor === '#f8f9fa') {
                     screen.style.background = `linear-gradient(135deg, ${selectedBackgroundColor}, #e9ecef)`;
@@ -954,7 +993,7 @@
                 }
             }
             
-            // Update social links
+            // تحديث روابط وسائل التواصل
             const linksContainer = document.getElementById('preview-social-links');
             linksContainer.innerHTML = '';
             
@@ -1007,7 +1046,7 @@
                     return;
                 }
                 
-                // Collect social links
+                // جمع روابط وسائل التواصل
                 const socialLinks = [];
                 document.querySelectorAll('.social-link-item').forEach(item => {
                     const platform = item.querySelector('select').value;
@@ -1022,13 +1061,12 @@
                     bio,
                     socialLinks,
                     backgroundColor: selectedBackgroundColor,
-                    customBackground: customBackgroundImage,
                     uid: currentUser.uid,
                     username: currentUsername,
                     updatedAt: firebase.database.ServerValue.TIMESTAMP
                 };
 
-                // Upload avatar if selected
+                // رفع الصورة الشخصية إذا تم اختيارها
                 const avatarFile = document.getElementById('avatar-input').files[0];
                 if (avatarFile) {
                     try {
@@ -1042,7 +1080,7 @@
                     }
                 }
 
-                // Upload background if selected
+                // رفع الخلفية إذا تم اختيارها
                 const backgroundFile = document.getElementById('background-input').files[0];
                 if (backgroundFile) {
                     try {
@@ -1054,14 +1092,33 @@
                         console.error('Error uploading background:', error);
                         showStatus('خطأ في رفع الخلفية، سيتم المتابعة بدونها', 'error');
                     }
+                } else if (customBackgroundImage && customBackgroundImage.startsWith('data:')) {
+                    // إذا كانت الخلفية من base64 (تم اختيارها ولكن لم يتم حفظها بعد)
+                    try {
+                        showStatus('جاري رفع الخلفية...', 'info');
+                        
+                        // تحويل base64 إلى blob
+                        const response = await fetch(customBackgroundImage);
+                        const blob = await response.blob();
+                        
+                        const backgroundRef = storage.ref(`backgrounds/${currentUsername}/${Date.now()}_background.jpg`);
+                        const backgroundSnapshot = await backgroundRef.put(blob);
+                        profileData.backgroundImage = await backgroundSnapshot.ref.getDownloadURL();
+                    } catch (error) {
+                        console.error('Error uploading background:', error);
+                        showStatus('خطأ في رفع الخلفية، سيتم المتابعة بدونها', 'error');
+                    }
+                } else if (customBackgroundImage) {
+                    // إذا كانت الخلفية URL موجود مسبقاً
+                    profileData.backgroundImage = customBackgroundImage;
                 }
 
-                // Save to database
+                // حفظ في قاعدة البيانات
                 await database.ref('profiles/' + currentUsername).set(profileData);
                 
                 showStatus('تم حفظ البيانات بنجاح! 🎉', 'success');
                 
-                // Hide status after 3 seconds
+                // إخفاء الرسالة بعد 3 ثوان
                 setTimeout(() => {
                     hideStatus();
                 }, 3000);
@@ -1104,7 +1161,7 @@
                     }
                     
                     if (profileData.socialLinks && profileData.socialLinks.length > 0) {
-                        // Clear existing links
+                        // مسح الروابط الموجودة
                         document.getElementById('social-links-container').innerHTML = '';
                         socialLinksCount = 0;
                         
@@ -1129,13 +1186,13 @@
                 try {
                     showStatus('جاري تسجيل الخروج...', 'info');
                     
-                    // Clear localStorage
+                    // مسح localStorage
                     localStorage.clear();
                     
-                    // Sign out from Firebase
+                    // تسجيل الخروج من Firebase
                     await auth.signOut();
                     
-                    // Redirect to login page
+                    // إعادة التوجيه لصفحة تسجيل الدخول
                     window.location.href = 'index.html';
                 } catch (error) {
                     console.error('Logout error:', error);
