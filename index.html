@@ -12,8 +12,8 @@
         }
         
         body {
-            font-family: Arial, sans-serif;
-            background: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
             min-height: 100vh;
             display: flex;
@@ -22,32 +22,50 @@
         }
         
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
         }
         
-        h1 {
+        .logo {
             text-align: center;
-            color: #333;
             margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #333;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .logo p {
+            color: #666;
+            font-size: 14px;
         }
         
         .tabs {
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8f9fa;
         }
         
         .tab {
             flex: 1;
-            padding: 10px;
-            background: #f0f0f0;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
             border: none;
             cursor: pointer;
-            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
         }
         
         .tab.active {
@@ -55,123 +73,134 @@
             color: white;
         }
         
-        .form-container {
-            display: none;
-        }
-        
-        .form-container.active {
-            display: block;
-        }
-        
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #333;
         }
         
-        input {
+        .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
             font-size: 16px;
+            transition: border-color 0.3s ease;
         }
         
-        button {
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .submit-btn {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             background: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
         
-        button:hover {
+        .submit-btn:hover {
             background: #0056b3;
         }
         
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             text-align: center;
+            font-weight: 600;
         }
         
-        .success {
+        .status-success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
         
-        .error {
+        .status-error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
         
-        .loading {
-            display: none;
-            text-align: center;
-            color: #007bff;
+        .username-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.4;
         }
         
-        small {
-            color: #666;
-            font-size: 12px;
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Q8 Bio</h1>
+        <div class="logo">
+            <h1>Q8 Bio</h1>
+            <p>أنشئ ملفك التعريفي الرقمي</p>
+        </div>
         
         <div class="tabs">
             <button class="tab active" onclick="switchTab('login')">تسجيل الدخول</button>
             <button class="tab" onclick="switchTab('register')">إنشاء حساب</button>
         </div>
         
-        <div id="message"></div>
-        <div id="loading" class="loading">جاري المعالجة...</div>
+        <div id="status-container"></div>
         
-        <!-- تسجيل الدخول -->
-        <div id="login-form" class="form-container active">
-            <form onsubmit="login(event)">
-                <div class="form-group">
-                    <label>البريد الإلكتروني:</label>
-                    <input type="email" id="login-email" required>
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور:</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="submit">تسجيل الدخول</button>
-            </form>
+        <!-- Login Form -->
+        <div id="login-form">
+            <div class="form-group">
+                <label for="login-email">البريد الإلكتروني:</label>
+                <input type="email" id="login-email" placeholder="أدخل بريدك الإلكتروني" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">كلمة المرور:</label>
+                <input type="password" id="login-password" placeholder="أدخل كلمة المرور" required>
+            </div>
+            <button type="button" class="submit-btn" onclick="loginUser()">تسجيل الدخول</button>
         </div>
         
-        <!-- إنشاء حساب -->
-        <div id="register-form" class="form-container">
-            <form onsubmit="register(event)">
-                <div class="form-group">
-                    <label>اسم المستخدم:</label>
-                    <input type="text" id="register-username" required pattern="[a-zA-Z0-9_]{3,20}">
-                    <small>3-20 حرف، أحرف وأرقام فقط</small>
+        <!-- Register Form -->
+        <div id="register-form" style="display: none;">
+            <div class="form-group">
+                <label for="register-username">اسم المستخدم:</label>
+                <input type="text" id="register-username" placeholder="اختر اسم مستخدم فريد" required>
+                <div class="username-info">
+                    • 3-20 حرف فقط<br>
+                    • أحرف إنجليزية وأرقام وشرطة سفلية فقط<br>
+                    • سيكون رابطك: q8bio.com/اسم_المستخدم
                 </div>
-                <div class="form-group">
-                    <label>البريد الإلكتروني:</label>
-                    <input type="email" id="register-email" required>
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور:</label>
-                    <input type="password" id="register-password" required minlength="6">
-                </div>
-                <button type="submit">إنشاء الحساب</button>
-            </form>
+            </div>
+            <div class="form-group">
+                <label for="register-email">البريد الإلكتروني:</label>
+                <input type="email" id="register-email" placeholder="أدخل بريدك الإلكتروني" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">كلمة المرور:</label>
+                <input type="password" id="register-password" placeholder="اختر كلمة مرور قوية (6 أحرف على الأقل)" required>
+            </div>
+            <button type="button" class="submit-btn" onclick="registerUser()">إنشاء الحساب</button>
         </div>
     </div>
 
@@ -192,178 +221,216 @@
             appId: "1:618331429708:web:4357af8958ac90a67d0de9"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // التحقق من تسجيل الدخول
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                window.location.href = 'dashboard.html';
-            }
-        });
-
-        // تبديل التبويبات
+        // Switch between tabs
         function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+            const tabs = document.querySelectorAll('.tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
             
-            event.target.classList.add('active');
-            document.getElementById(tab + '-form').classList.add('active');
+            tabs.forEach(t => t.classList.remove('active'));
             
-            clearMessage();
+            if (tab === 'login') {
+                document.querySelector('.tab:first-child').classList.add('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                document.querySelector('.tab:last-child').classList.add('active');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+            
+            hideStatus();
         }
 
-        // عرض الرسائل
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+        // Show status message
+        function showStatus(message, type) {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
         }
 
-        function clearMessage() {
-            document.getElementById('message').innerHTML = '';
+        // Hide status message
+        function hideStatus() {
+            document.getElementById('status-container').innerHTML = '';
         }
 
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        // Validate username
+        function validateUsername(username) {
+            const regex = /^[a-zA-Z0-9_]{3,20}$/;
+            return regex.test(username);
         }
 
-        // تسجيل الدخول
-        async function login(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            showLoading(true);
-            clearMessage();
-            
+        // Check if username exists
+        async function checkUsernameExists(username) {
             try {
-                await auth.signInWithEmailAndPassword(email, password);
-                showMessage('تم تسجيل الدخول بنجاح!', 'success');
+                const snapshot = await database.ref('users/' + username).once('value');
+                return snapshot.exists();
             } catch (error) {
-                showLoading(false);
-                console.error('Login error:', error);
-                let errorMessage = 'حدث خطأ في تسجيل الدخول';
-                
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                        errorMessage = 'البريد الإلكتروني غير مسجل';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'كلمة المرور غير صحيحة';
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'البريد الإلكتروني غير صحيح';
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'تم تجاوز عدد المحاولات المسموح. حاول لاحقاً';
-                        break;
-                }
-                
-                showMessage(errorMessage, 'error');
+                console.error('Error checking username:', error);
+                return false;
             }
         }
 
-        // إنشاء حساب
-        async function register(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('register-username').value.toLowerCase().trim();
+        // Register user
+        async function registerUser() {
+            const username = document.getElementById('register-username').value.trim();
             const email = document.getElementById('register-email').value.trim();
             const password = document.getElementById('register-password').value;
-            
-            showLoading(true);
-            clearMessage();
-            
+
+            // Validation
+            if (!username || !email || !password) {
+                showStatus('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+
+            if (!validateUsername(username)) {
+                showStatus('اسم المستخدم غير صحيح. يجب أن يكون 3-20 حرف (أحرف إنجليزية وأرقام وشرطة سفلية فقط)', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showStatus('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
             try {
-                console.log('Starting registration process...');
-                
-                // التحقق من صحة اسم المستخدم
-                if (username.length < 3 || username.length > 20) {
-                    throw new Error('اسم المستخدم يجب أن يكون بين 3-20 حرف');
+                showStatus('جاري التحقق من اسم المستخدم...', 'info');
+
+                // Check if username exists
+                const usernameExists = await checkUsernameExists(username);
+                if (usernameExists) {
+                    showStatus('اسم المستخدم موجود بالفعل، يرجى اختيار اسم آخر', 'error');
+                    return;
                 }
-                
-                if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-                    throw new Error('اسم المستخدم يجب أن يحتوي على أحرف وأرقام وشرطة سفلية فقط');
-                }
-                
-                console.log('Username validation passed');
-                
-                // التحقق من توفر اسم المستخدم
-                console.log('Checking username availability...');
-                const usernameSnapshot = await database.ref('users/' + username).once('value');
-                if (usernameSnapshot.exists()) {
-                    throw new Error('اسم المستخدم مستخدم بالفعل');
-                }
-                
-                console.log('Username is available');
-                
-                // إنشاء الحساب
-                console.log('Creating user account...');
+
+                showStatus('جاري إنشاء الحساب...', 'info');
+
+                // Create user with Firebase Auth
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                
-                console.log('User account created, UID:', user.uid);
-                
-                // حفظ بيانات المستخدم
-                console.log('Saving user data...');
+
+                // Save user data to database
                 await database.ref('users/' + username).set({
                     uid: user.uid,
                     email: email,
                     username: username,
                     createdAt: firebase.database.ServerValue.TIMESTAMP
                 });
-                
-                console.log('User data saved');
 
-                // إنشاء ملف تعريفي افتراضي
-                console.log('Creating default profile...');
-                await database.ref('profiles/' + username).set({
-                    uid: user.uid,
-                    username: username,
-                    name: '',
-                    bio: '',
-                    avatar: '',
-                    backgroundColor: '#007bff',
-                    backgroundImage: '',
-                    socialLinks: [],
-                    createdAt: firebase.database.ServerValue.TIMESTAMP,
-                    updatedAt: firebase.database.ServerValue.TIMESTAMP
-                });
-                
-                console.log('Profile created successfully');
-                showMessage('تم إنشاء الحساب بنجاح!', 'success');
-                
+                // Store username in localStorage
+                localStorage.setItem('currentUsername', username);
+                localStorage.setItem('currentUserUID', user.uid);
+
+                showStatus('تم إنشاء الحساب بنجاح! جاري التوجيه...', 'success');
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+
             } catch (error) {
-                showLoading(false);
                 console.error('Registration error:', error);
                 let errorMessage = 'حدث خطأ في إنشاء الحساب';
                 
-                if (error.message && (error.message.includes('اسم المستخدم') || error.message.includes('أحرف'))) {
-                    errorMessage = error.message;
-                } else {
-                    switch (error.code) {
-                        case 'auth/email-already-in-use':
-                            errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
-                            break;
-                        case 'auth/invalid-email':
-                            errorMessage = 'البريد الإلكتروني غير صحيح';
-                            break;
-                        case 'auth/weak-password':
-                            errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
-                            break;
-                        case 'auth/network-request-failed':
-                            errorMessage = 'مشكلة في الاتصال بالإنترنت';
-                            break;
-                        default:
-                            errorMessage = 'حدث خطأ غير متوقع: ' + (error.message || error.code);
-                    }
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صحيح';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'كلمة المرور ضعيفة';
                 }
                 
-                showMessage(errorMessage, 'error');
+                showStatus(errorMessage, 'error');
             }
         }
+
+        // Login user
+        async function loginUser() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showStatus('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+
+            try {
+                showStatus('جاري تسجيل الدخول...', 'info');
+
+                // Sign in with Firebase Auth
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Find username from database
+                const usersSnapshot = await database.ref('users').orderByChild('uid').equalTo(user.uid).once('value');
+                const userData = usersSnapshot.val();
+
+                if (userData) {
+                    const username = Object.keys(userData)[0];
+                    
+                    // Store username in localStorage
+                    localStorage.setItem('currentUsername', username);
+                    localStorage.setItem('currentUserUID', user.uid);
+
+                    showStatus('تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showStatus('خطأ في تحميل بيانات المستخدم', 'error');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMessage = 'خطأ في تسجيل الدخول';
+                
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'المستخدم غير موجود';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صحيح';
+                }
+                
+                showStatus(errorMessage, 'error');
+            }
+        }
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, redirect to dashboard
+                const storedUsername = localStorage.getItem('currentUsername');
+                const storedUID = localStorage.getItem('currentUserUID');
+                
+                if (storedUsername && storedUID === user.uid) {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        });
+
+        // Handle Enter key press
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const loginForm = document.getElementById('login-form');
+                const registerForm = document.getElementById('register-form');
+                
+                if (loginForm.style.display !== 'none') {
+                    loginUser();
+                } else if (registerForm.style.display !== 'none') {
+                    registerUser();
+                }
+            }
+        });
     </script>
 </body>
 </html>
