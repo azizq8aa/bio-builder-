@@ -646,7 +646,37 @@
             clearStatus('forgot-status');
         }
 
-        // Google Sign-In function - FIXED
+        // Helper function to generate safe username
+        function generateSafeUsername(email, displayName) {
+            let username = '';
+            
+            // Try to extract from email first
+            if (email && typeof email === 'string' && email.includes('@')) {
+                username = email.split('@')[0];
+            }
+            
+            // If no username from email, try display name
+            if (!username && displayName && typeof displayName === 'string') {
+                username = displayName.replace(/\s+/g, '').toLowerCase();
+            }
+            
+            // If still no username, generate random one
+            if (!username || username.length < 2) {
+                username = 'user' + Math.floor(Math.random() * 100000);
+            }
+            
+            // Clean username (remove special characters)
+            username = username.replace(/[^a-zA-Z0-9]/g, '');
+            
+            // Ensure minimum length
+            if (username.length < 3) {
+                username = username + Math.floor(Math.random() * 1000);
+            }
+            
+            return username;
+        }
+
+        // Google Sign-In function - COMPLETELY REWRITTEN
         async function signInWithGoogle() {
             const button = event.target;
             
@@ -661,39 +691,50 @@
                 const result = await auth.signInWithPopup(provider);
                 const user = result.user;
                 
-                // التحقق من وجود البيانات المطلوبة
-                if (!user || !user.email) {
-                    throw new Error('لم يتم الحصول على بيانات المستخدم من Google');
+                console.log('Google user data:', user);
+                
+                // التحقق من وجود البيانات الأساسية
+                if (!user) {
+                    throw new Error('لم يتم الحصول على بيانات المستخدم');
                 }
                 
-                // Extract username from email (before @) - مع التحقق من الأمان
-                let username;
-                try {
-                    username = user.email.split('@')[0];
-                    if (!username || username.length < 2) {
-                        username = 'user' + Math.floor(Math.random() * 10000);
-                    }
-                } catch (error) {
-                    console.error('Error extracting username:', error);
-                    username = 'user' + Math.floor(Math.random() * 10000);
-                }
+                // Generate safe username
+                const safeUsername = generateSafeUsername(user.email, user.displayName);
                 
-                // Check if user already exists in database
+                console.log('Generated username:', safeUsername);
+                
+                // Check if user exists in database by UID
                 const usersSnapshot = await database.ref('users').orderByChild('uid').equalTo(user.uid).once('value');
                 const existingUserData = usersSnapshot.val();
                 
-                let finalUsername = username;
+                let finalUsername = safeUsername;
                 
                 if (!existingUserData) {
-                    // New user - check if username is available
-                    const usernameSnapshot = await database.ref('users/' + username).once('value');
+                    console.log('New user, creating database entry...');
                     
-                    if (usernameSnapshot.exists()) {
-                        // Username exists, add random number
-                        finalUsername = username + Math.floor(Math.random() * 1000);
+                    // Check if username is available
+                    let usernameCounter = 0;
+                    let isUsernameAvailable = false;
+                    
+                    while (!isUsernameAvailable && usernameCounter < 100) {
+                        const testUsername = usernameCounter === 0 ? safeUsername : safeUsername + usernameCounter;
+                        const usernameSnapshot = await database.ref('users/' + testUsername).once('value');
+                        
+                        if (!usernameSnapshot.exists()) {
+                            finalUsername = testUsername;
+                            isUsernameAvailable = true;
+                        } else {
+                            usernameCounter++;
+                        }
                     }
                     
-                    // Save new user data to database
+                    if (!isUsernameAvailable) {
+                        finalUsername = safeUsername + Math.floor(Math.random() * 10000);
+                    }
+                    
+                    console.log('Final username:', finalUsername);
+                    
+                    // Create user data
                     const userData = {
                         uid: user.uid,
                         email: user.email || '',
@@ -701,20 +742,37 @@
                         displayName: user.displayName || finalUsername,
                         photoURL: user.photoURL || '',
                         provider: 'google',
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                        createdAt: firebase.database.ServerValue.TIMESTAMP,
+                        lastLogin: firebase.database.ServerValue.TIMESTAMP
                     };
                     
+                    // Save to database
                     await database.ref('users/' + finalUsername).set(userData);
+                    console.log('User data saved successfully');
+                    
                 } else {
-                    // Existing user - get their username
+                    console.log('Existing user found');
+                    // Get existing username
                     finalUsername = Object.keys(existingUserData)[0];
+                    
+                    // Update last login
+                    await database.ref('users/' + finalUsername + '/lastLogin').set(firebase.database.ServerValue.TIMESTAMP);
                 }
                 
                 // Store user info in localStorage
                 localStorage.setItem('currentUsername', finalUsername);
                 localStorage.setItem('currentUserUID', user.uid);
+                localStorage.setItem('currentUserEmail', user.email || '');
                 
-                showStatus('login-status', 'تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
+                console.log('Stored in localStorage:', {
+                    username: finalUsername,
+                    uid: user.uid,
+                    email: user.email
+                });
+                
+                const activeForm = document.querySelector('.form.active');
+                const statusId = activeForm.id === 'login-form' ? 'login-status' : 'register-status';
+                showStatus(statusId, 'تم تسجيل الدخول بنجاح! جاري التوجيه...', 'success');
                 
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
@@ -737,8 +795,11 @@
                     case 'auth/network-request-failed':
                         errorMessage = 'مشكلة في الاتصال بالإنترنت';
                         break;
+                    case 'auth/account-exists-with-different-credential':
+                        errorMessage = 'يوجد حساب بنفس البريد الإلكتروني بطريقة تسجيل مختلفة';
+                        break;
                     default:
-                        errorMessage = 'حدث خطأ غير متوقع: ' + (error.message || 'غير محدد');
+                        errorMessage = 'حدث خطأ: ' + (error.message || 'غير محدد');
                 }
                 
                 const activeForm = document.querySelector('.form.active');
@@ -956,14 +1017,23 @@
         }
 
         // Check if user is already logged in
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
-                // User is signed in, redirect to dashboard
-                const storedUsername = localStorage.getItem('currentUsername');
-                const storedUID = localStorage.getItem('currentUserUID');
+                console.log('User is already signed in:', user.uid);
                 
-                if (storedUsername && storedUID === user.uid) {
+                // Check if user data exists in database
+                const usersSnapshot = await database.ref('users').orderByChild('uid').equalTo(user.uid).once('value');
+                const userData = usersSnapshot.val();
+                
+                if (userData) {
+                    const username = Object.keys(userData)[0];
+                    localStorage.setItem('currentUsername', username);
+                    localStorage.setItem('currentUserUID', user.uid);
+                    
+                    // Redirect to dashboard
                     window.location.href = 'dashboard.html';
+                } else {
+                    console.log('User exists in Auth but not in Database, will be handled on next sign-in');
                 }
             }
         });
