@@ -120,6 +120,11 @@
             text-align: center;
             color: #007bff;
         }
+        
+        small {
+            color: #666;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -238,6 +243,7 @@
                 showMessage('تم تسجيل الدخول بنجاح!', 'success');
             } catch (error) {
                 showLoading(false);
+                console.error('Login error:', error);
                 let errorMessage = 'حدث خطأ في تسجيل الدخول';
                 
                 switch (error.code) {
@@ -250,6 +256,9 @@
                     case 'auth/invalid-email':
                         errorMessage = 'البريد الإلكتروني غير صحيح';
                         break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'تم تجاوز عدد المحاولات المسموح. حاول لاحقاً';
+                        break;
                 }
                 
                 showMessage(errorMessage, 'error');
@@ -260,33 +269,56 @@
         async function register(event) {
             event.preventDefault();
             
-            const username = document.getElementById('register-username').value.toLowerCase();
-            const email = document.getElementById('register-email').value;
+            const username = document.getElementById('register-username').value.toLowerCase().trim();
+            const email = document.getElementById('register-email').value.trim();
             const password = document.getElementById('register-password').value;
             
             showLoading(true);
             clearMessage();
             
             try {
-                // التحقق من اسم المستخدم
+                console.log('Starting registration process...');
+                
+                // التحقق من صحة اسم المستخدم
+                if (username.length < 3 || username.length > 20) {
+                    throw new Error('اسم المستخدم يجب أن يكون بين 3-20 حرف');
+                }
+                
+                if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                    throw new Error('اسم المستخدم يجب أن يحتوي على أحرف وأرقام وشرطة سفلية فقط');
+                }
+                
+                console.log('Username validation passed');
+                
+                // التحقق من توفر اسم المستخدم
+                console.log('Checking username availability...');
                 const usernameSnapshot = await database.ref('users/' + username).once('value');
                 if (usernameSnapshot.exists()) {
                     throw new Error('اسم المستخدم مستخدم بالفعل');
                 }
                 
+                console.log('Username is available');
+                
                 // إنشاء الحساب
+                console.log('Creating user account...');
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
+                console.log('User account created, UID:', user.uid);
+                
                 // حفظ بيانات المستخدم
+                console.log('Saving user data...');
                 await database.ref('users/' + username).set({
                     uid: user.uid,
                     email: email,
                     username: username,
                     createdAt: firebase.database.ServerValue.TIMESTAMP
                 });
+                
+                console.log('User data saved');
 
                 // إنشاء ملف تعريفي افتراضي
+                console.log('Creating default profile...');
                 await database.ref('profiles/' + username).set({
                     uid: user.uid,
                     username: username,
@@ -296,25 +328,36 @@
                     backgroundColor: '#007bff',
                     backgroundImage: '',
                     socialLinks: [],
-                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
                 });
                 
+                console.log('Profile created successfully');
                 showMessage('تم إنشاء الحساب بنجاح!', 'success');
                 
             } catch (error) {
                 showLoading(false);
+                console.error('Registration error:', error);
                 let errorMessage = 'حدث خطأ في إنشاء الحساب';
                 
-                if (error.message.includes('اسم المستخدم')) {
+                if (error.message && (error.message.includes('اسم المستخدم') || error.message.includes('أحرف'))) {
                     errorMessage = error.message;
                 } else {
                     switch (error.code) {
                         case 'auth/email-already-in-use':
                             errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
                             break;
-                        case 'auth/weak-password':
-                            errorMessage = 'كلمة المرور ضعيفة';
+                        case 'auth/invalid-email':
+                            errorMessage = 'البريد الإلكتروني غير صحيح';
                             break;
+                        case 'auth/weak-password':
+                            errorMessage = 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'مشكلة في الاتصال بالإنترنت';
+                            break;
+                        default:
+                            errorMessage = 'حدث خطأ غير متوقع: ' + (error.message || error.code);
                     }
                 }
                 
