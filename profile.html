@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الملف التعريفي - Q8 Bio</title>
     <style>
         * {
@@ -20,16 +20,16 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            -webkit-overflow-scrolling: touch;
         }
         
         .phone-container {
-            width: 350px;
-            height: 600px;
+            width: 100%;
+            max-width: 375px;
+            height: 812px;
             background: #1a1a1a;
-            border-radius: 30px;
-            padding: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             position: relative;
         }
         
@@ -37,7 +37,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #007bff, #0056b3);
-            border-radius: 20px;
+            border-radius: 32px;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -46,7 +46,7 @@
             justify-content: center;
             color: white;
             text-align: center;
-            padding: 40px 30px;
+            padding: 60px 30px 40px;
         }
         
         .status-bar {
@@ -54,16 +54,36 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 35px;
+            height: 44px;
             background: rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            font-size: 13px;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            z-index: 15;
+        }
+        
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            z-index: 5;
         }
         
         .avatar {
@@ -71,7 +91,7 @@
             height: 120px;
             border-radius: 50%;
             background: rgba(255,255,255,0.2);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -83,24 +103,24 @@
         
         .name {
             font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         
         .bio {
             font-size: 16px;
             opacity: 0.9;
             line-height: 1.6;
-            max-width: 280px;
-            margin-bottom: 35px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            max-width: 300px;
+            margin-bottom: 40px;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.3);
         }
         
         .social-links {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             width: 100%;
             max-width: 280px;
         }
@@ -109,53 +129,62 @@
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: 500;
             border: 1px solid rgba(255,255,255,0.2);
-            text-decoration: none;
             color: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .social-link:hover {
             background: rgba(255,255,255,0.25);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             text-decoration: none;
             color: white;
         }
         
-        .social-link:active {
-            transform: translateY(0);
-        }
-        
         .social-icon {
-            font-size: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
         
-        /* Loading state */
+        .q8bio-credit {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        
         .loading {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100%;
+            gap: 20px;
         }
         
-        .loading-spinner {
+        .spinner {
             width: 40px;
             height: 40px;
             border: 3px solid rgba(255,255,255,0.3);
             border-top: 3px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
         }
         
         @keyframes spin {
@@ -163,68 +192,29 @@
             100% { transform: rotate(360deg); }
         }
         
-        .loading-text {
-            font-size: 16px;
-            opacity: 0.8;
-        }
-        
-        /* Error state */
-        .error {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-        }
-        
-        .error-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            opacity: 0.7;
-        }
-        
-        .error-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
         .error-message {
-            font-size: 16px;
-            opacity: 0.8;
-            line-height: 1.5;
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 18px;
+            line-height: 1.6;
         }
         
-        /* Platform icons */
-        .platform-instagram::before { content: '📷'; }
-        .platform-twitter::before { content: '🐦'; }
-        .platform-facebook::before { content: '👥'; }
-        .platform-linkedin::before { content: '💼'; }
-        .platform-youtube::before { content: '📺'; }
-        .platform-tiktok::before { content: '🎵'; }
-        .platform-snapchat::before { content: '👻'; }
-        .platform-whatsapp::before { content: '💬'; }
-        .platform-telegram::before { content: '✈️'; }
-        .platform-website::before { content: '🌐'; }
-        
-        /* تحسينات Safari */
-        @supports (-webkit-touch-callout: none) {
-            .social-link {
-                -webkit-tap-highlight-color: transparent;
-            }
+        .error-message h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         
         /* تجاوب للشاشات الصغيرة */
         @media (max-width: 480px) {
             .phone-container {
-                width: 320px;
-                height: 550px;
-                margin: 10px;
+                max-width: 350px;
+                height: 700px;
+                border-radius: 30px;
             }
             
             .phone-screen {
-                padding: 30px 20px;
+                border-radius: 25px;
+                padding: 50px 25px 30px;
             }
             
             .avatar {
@@ -247,74 +237,44 @@
             }
             
             .social-link {
-                padding: 10px 16px;
-                font-size: 13px;
+                padding: 12px 16px;
+                font-size: 14px;
             }
         }
         
-        @media (max-width: 360px) {
+        @media (max-width: 375px) {
+            body {
+                padding: 10px;
+            }
+            
             .phone-container {
-                width: 280px;
-                height: 500px;
+                max-width: 320px;
+                height: 600px;
             }
             
-            .avatar {
-                width: 80px;
-                height: 80px;
-                font-size: 35px;
+            .phone-screen {
+                padding: 40px 20px 25px;
             }
-            
-            .name {
-                font-size: 20px;
-            }
-            
-            .bio {
-                font-size: 13px;
-            }
-        }
-        
-        /* تحسينات الأداء */
-        .social-link {
-            will-change: transform;
-        }
-        
-        /* تحسينات إضافية للتفاعل */
-        .social-link:focus {
-            outline: 2px solid rgba(255,255,255,0.5);
-            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
     <div class="phone-container">
-        <div class="phone-screen" id="profile-screen">
+        <div class="phone-screen" id="phone-screen">
             <div class="status-bar">
                 <span id="current-time">9:41</span>
                 <span>🔋 100%</span>
             </div>
+            <div class="dynamic-island"></div>
             
-            <!-- Loading state -->
-            <div class="loading" id="loading-state">
-                <div class="loading-spinner"></div>
-                <div class="loading-text">جاري تحميل الملف التعريفي...</div>
-            </div>
-            
-            <!-- Error state -->
-            <div class="error" id="error-state" style="display: none;">
-                <div class="error-icon">😔</div>
-                <div class="error-title">عذراً!</div>
-                <div class="error-message">لم يتم العثور على هذا الملف التعريفي</div>
-            </div>
-            
-            <!-- Profile content -->
-            <div id="profile-content" style="display: none;">
-                <img class="avatar" id="profile-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='60' fill='rgba(255,255,255,0.2)'/%3E%3Ctext x='60' y='70' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="الصورة الشخصية">
-                <div class="name" id="profile-name">اسم المستخدم</div>
-                <div class="bio" id="profile-bio">نبذة تعريفية</div>
-                <div class="social-links" id="profile-social-links">
-                    <!-- روابط وسائل التواصل -->
+            <div class="profile-content" id="profile-content">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>جاري تحميل الملف التعريفي...</div>
                 </div>
             </div>
+            
+            <div class="q8bio-credit">Q8 Bio</div>
         </div>
     </div>
 
@@ -341,11 +301,11 @@
 
         const database = firebase.database();
 
-        // Platform icons mapping
-        const platformIcons = {
+        // Social platform icons
+        const socialIcons = {
             'instagram': '📷',
             'twitter': '🐦',
-            'facebook': '👥',
+            'facebook': '📘',
             'linkedin': '💼',
             'youtube': '📺',
             'tiktok': '🎵',
@@ -355,10 +315,21 @@
             'website': '🌐'
         };
 
-        // Get username from URL parameter
+        // Get username from URL
         function getUsernameFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('user');
+            const username = urlParams.get('user');
+            
+            if (!username) {
+                // Try to get from path (e.g., /username)
+                const path = window.location.pathname;
+                const pathUsername = path.split('/').pop();
+                if (pathUsername && pathUsername !== 'profile.html') {
+                    return pathUsername;
+                }
+            }
+            
+            return username;
         }
 
         // Update current time
@@ -370,27 +341,6 @@
                 hour12: false 
             });
             document.getElementById('current-time').textContent = timeString;
-        }
-
-        // Show loading state
-        function showLoading() {
-            document.getElementById('loading-state').style.display = 'flex';
-            document.getElementById('error-state').style.display = 'none';
-            document.getElementById('profile-content').style.display = 'none';
-        }
-
-        // Show error state
-        function showError() {
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('error-state').style.display = 'flex';
-            document.getElementById('profile-content').style.display = 'none';
-        }
-
-        // Show profile content
-        function showProfile() {
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('error-state').style.display = 'none';
-            document.getElementById('profile-content').style.display = 'flex';
         }
 
         // Adjust brightness for gradient
@@ -407,132 +357,99 @@
 
         // Load and display profile
         async function loadProfile(username) {
-            if (!username) {
-                showError();
-                return;
-            }
-
             try {
-                showLoading();
-                
-                console.log('Loading profile for username:', username);
-                
-                // Get profile data from Firebase
                 const snapshot = await database.ref('profiles/' + username).once('value');
                 const profileData = snapshot.val();
                 
                 if (!profileData) {
-                    console.log('Profile not found for username:', username);
-                    showError();
+                    showError('الملف التعريفي غير موجود', 'لم يتم العثور على هذا المستخدم');
                     return;
                 }
-                
-                console.log('Profile data loaded:', profileData);
-                
-                // Update profile content
-                document.getElementById('profile-name').textContent = profileData.name || username;
-                document.getElementById('profile-bio').textContent = profileData.bio || 'مرحباً بكم في ملفي التعريفي';
-                
-                // Update avatar
-                if (profileData.avatar) {
-                    document.getElementById('profile-avatar').src = profileData.avatar;
-                }
-                
+
                 // Update background
-                const screen = document.getElementById('profile-screen');
+                const screen = document.getElementById('phone-screen');
+                
                 if (profileData.backgroundImage) {
+                    // Custom background image
                     screen.style.backgroundImage = `url(${profileData.backgroundImage})`;
                     screen.style.backgroundSize = 'cover';
                     screen.style.backgroundPosition = 'center';
                     screen.style.background = 'none';
+                    screen.style.color = 'white';
                 } else if (profileData.backgroundColor) {
-                    const bgColor = profileData.backgroundColor;
-                    if (bgColor === '#f8f9fa') {
-                        screen.style.background = `linear-gradient(135deg, ${bgColor}, #e9ecef)`;
+                    // Color background
+                    screen.style.backgroundImage = 'none';
+                    if (profileData.backgroundColor === '#f8f9fa') {
+                        screen.style.background = `linear-gradient(135deg, ${profileData.backgroundColor}, #e9ecef)`;
                         screen.style.color = '#333';
                     } else {
-                        screen.style.background = `linear-gradient(135deg, ${bgColor}, ${adjustBrightness(bgColor, -20)})`;
+                        const darkerColor = adjustBrightness(profileData.backgroundColor, -20);
+                        screen.style.background = `linear-gradient(135deg, ${profileData.backgroundColor}, ${darkerColor})`;
                         screen.style.color = 'white';
                     }
-                    screen.style.backgroundImage = 'none';
+                } else {
+                    // Default background
+                    screen.style.background = 'linear-gradient(135deg, #007bff, #0056b3)';
+                    screen.style.color = 'white';
                 }
-                
-                // Update social links
-                const socialLinksContainer = document.getElementById('profile-social-links');
-                socialLinksContainer.innerHTML = '';
-                
+
+                // Build profile content
+                let profileHTML = `
+                    <img class="avatar" src="${profileData.avatar || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\' viewBox=\'0 0 120 120\'%3E%3Ccircle cx=\'60\' cy=\'60\' r=\'60\' fill=\'rgba(255,255,255,0.2)\'/%3E%3Ctext x=\'60\' y=\'70\' text-anchor=\'middle\' font-size=\'40\' fill=\'white\'%3E👤%3C/text%3E%3C/svg%3E'}" alt="الصورة الشخصية">
+                    <div class="name">${profileData.name || 'مستخدم Q8 Bio'}</div>
+                    <div class="bio">${profileData.bio || 'مرحباً بكم في ملفي التعريفي'}</div>
+                `;
+
+                // Add social links
                 if (profileData.socialLinks && profileData.socialLinks.length > 0) {
+                    profileHTML += '<div class="social-links">';
+                    
                     profileData.socialLinks.forEach(link => {
-                        if (link.platform && link.url) {
-                            const linkElement = document.createElement('a');
-                            linkElement.className = 'social-link';
-                            linkElement.href = link.url;
-                            linkElement.target = '_blank';
-                            linkElement.rel = 'noopener noreferrer';
-                            
-                            const icon = platformIcons[link.platform] || '🔗';
-                            linkElement.innerHTML = `
+                        const icon = socialIcons[link.platform] || '🔗';
+                        profileHTML += `
+                            <a href="${link.url}" class="social-link" target="_blank" rel="noopener noreferrer">
+                                <span>${link.name}</span>
                                 <span class="social-icon">${icon}</span>
-                                <span>${link.name || link.platform}</span>
-                            `;
-                            
-                            socialLinksContainer.appendChild(linkElement);
-                        }
+                            </a>
+                        `;
                     });
+                    
+                    profileHTML += '</div>';
                 }
-                
-                // Update page title
-                document.title = `${profileData.name || username} - Q8 Bio`;
-                
-                showProfile();
-                
+
+                // Update content
+                document.getElementById('profile-content').innerHTML = profileHTML;
+
             } catch (error) {
                 console.error('Error loading profile:', error);
-                showError();
+                showError('خطأ في التحميل', 'حدث خطأ أثناء تحميل الملف التعريفي');
             }
         }
 
-        // Initialize page
+        // Show error message
+        function showError(title, message) {
+            document.getElementById('profile-content').innerHTML = `
+                <div class="error-message">
+                    <h2>${title}</h2>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Update time immediately and then every minute
+            // Update time every minute
             updateTime();
             setInterval(updateTime, 60000);
             
             // Get username and load profile
             const username = getUsernameFromURL();
-            console.log('Username from URL:', username);
             
             if (username) {
                 loadProfile(username);
             } else {
-                showError();
+                showError('رابط غير صحيح', 'يرجى التأكد من صحة الرابط');
             }
-        });
-
-        // Handle link clicks with analytics (optional)
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.social-link')) {
-                const link = e.target.closest('.social-link');
-                const platform = link.querySelector('.social-icon').textContent;
-                console.log('Social link clicked:', platform);
-                
-                // Add analytics tracking here if needed
-            }
-        });
-
-        // Prevent context menu on long press (mobile)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // Handle orientation change
-        window.addEventListener('orientationchange', function() {
-            setTimeout(function() {
-                // Force repaint after orientation change
-                document.body.style.display = 'none';
-                document.body.offsetHeight; // Trigger reflow
-                document.body.style.display = 'flex';
-            }, 100);
         });
     </script>
 </body>
