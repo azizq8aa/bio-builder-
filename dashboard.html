@@ -364,8 +364,12 @@
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
         }
         
-        /* زر الحفظ */
-        .save-btn {
+        /* زر الحفظ المثبت */
+        .fixed-save-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border: none;
@@ -375,21 +379,20 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            z-index: 999;
         }
         
-        .save-btn:hover {
+        .fixed-save-btn:hover {
             background: linear-gradient(135deg, #218838, #1e7e34);
-            transform: translateY(-2px);
+            transform: translateX(-50%) translateY(-2px);
             box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
         }
         
-        .save-btn:disabled {
+        .fixed-save-btn:disabled {
             background: #6c757d;
             cursor: not-allowed;
-            transform: none;
+            transform: translateX(-50%);
             box-shadow: none;
         }
         
@@ -623,12 +626,17 @@
             <h1 class="header-title">Q8 Bio - لوحة التحكم</h1>
             <div class="header-actions">
                 <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
-                <a href="#" class="profile-link-container" id="profile-link">
-                    q8bio.com/testuser
+                <a href="#" class="profile-link-container" id="profile-link" target="_blank">
+                    q8bio.com/loading...
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- زر الحفظ المثبت -->
+    <button type="button" class="fixed-save-btn" onclick="saveProfile()">
+        💾 حفظ جميع التغييرات
+    </button>
 
     <div class="container">
         <div class="main-content">
@@ -705,11 +713,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- زر الحفظ -->
-                <button type="button" class="save-btn" onclick="saveProfile()">
-                    💾 حفظ جميع التغييرات
-                </button>
             </div>
 
             <!-- قسم المعاينة -->
@@ -762,7 +765,7 @@
 
         // Global variables
         let currentUser = null;
-        let currentUsername = 'testuser';
+        let currentUsername = null;
         let socialLinksCount = 0;
         let selectedBackgroundColor = '#007bff';
         let customBackgroundImage = null;
@@ -782,30 +785,73 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
-            auth.onAuthStateChanged(user => {
+            // Check authentication and get user data
+            auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     currentUser = user;
-                    loadUserProfile();
+                    
+                    // Get username from localStorage first
+                    const storedUsername = localStorage.getItem('currentUsername');
+                    const storedUID = localStorage.getItem('currentUserUID');
+                    
+                    if (storedUsername && storedUID === user.uid) {
+                        currentUsername = storedUsername;
+                        console.log('Using stored username:', currentUsername);
+                        await initializeDashboard();
+                    } else {
+                        // Find username from database
+                        try {
+                            const usersSnapshot = await database.ref('users').orderByChild('uid').equalTo(user.uid).once('value');
+                            const userData = usersSnapshot.val();
+                            
+                            if (userData) {
+                                currentUsername = Object.keys(userData)[0];
+                                console.log('Found username from database:', currentUsername);
+                                
+                                // Update localStorage
+                                localStorage.setItem('currentUsername', currentUsername);
+                                localStorage.setItem('currentUserUID', user.uid);
+                                
+                                await initializeDashboard();
+                            } else {
+                                console.error('User data not found');
+                                showStatus('خطأ في تحميل بيانات المستخدم', 'error');
+                                await auth.signOut();
+                                window.location.href = 'index_complete_fixed.html';
+                            }
+                        } catch (error) {
+                            console.error('Error loading user data:', error);
+                            showStatus('خطأ في تحميل بيانات المستخدم', 'error');
+                            await auth.signOut();
+                            window.location.href = 'index_complete_fixed.html';
+                        }
+                    }
                 } else {
-                    // For demo purposes, continue without authentication
-                    currentUser = { uid: 'demo-user', email: 'demo@example.com' };
-                    loadUserProfile();
+                    // No user logged in, redirect to login
+                    localStorage.clear();
+                    window.location.href = 'index_complete_fixed.html';
                 }
             });
+        });
 
+        async function initializeDashboard() {
             // Set up event listeners
             setupEventListeners();
-            
-            // Add initial social link
-            addSocialLink();
             
             // Update profile link
             updateProfileLink();
             
+            // Load user profile
+            await loadUserProfile();
+            
+            // Add initial social link if none exist
+            if (socialLinksCount === 0) {
+                addSocialLink();
+            }
+            
             // Initial preview update
             updatePreview();
-        });
+        }
 
         function setupEventListeners() {
             // Form inputs
@@ -964,13 +1010,20 @@
         }
 
         function updateProfileLink() {
-            const profileLink = document.getElementById('profile-link');
-            const link = `q8bio.com/${currentUsername}`;
-            profileLink.textContent = link;
-            profileLink.href = `profile.html?user=${currentUsername}`;
+            if (currentUsername) {
+                const profileLink = document.getElementById('profile-link');
+                const link = `q8bio.com/${currentUsername}`;
+                profileLink.textContent = link;
+                profileLink.href = `profile_complete_fixed.html?user=${currentUsername}`;
+            }
         }
 
         async function saveProfile() {
+            if (!currentUser || !currentUsername) {
+                showStatus('خطأ في المصادقة، يرجى تسجيل الدخول مرة أخرى', 'error');
+                return;
+            }
+
             try {
                 showStatus('جاري حفظ البيانات...', 'info');
                 
@@ -999,7 +1052,8 @@
                     backgroundColor: selectedBackgroundColor,
                     customBackground: customBackgroundImage,
                     uid: currentUser.uid,
-                    updatedAt: new Date().toISOString()
+                    username: currentUsername,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
                 };
 
                 // Upload avatar if selected
@@ -1037,6 +1091,8 @@
         }
 
         async function loadUserProfile() {
+            if (!currentUsername) return;
+
             try {
                 const snapshot = await database.ref('profiles/' + currentUsername).once('value');
                 const profileData = snapshot.val();
@@ -1065,7 +1121,7 @@
                         });
                     }
                     
-                    if (profileData.socialLinks) {
+                    if (profileData.socialLinks && profileData.socialLinks.length > 0) {
                         // Clear existing links
                         document.getElementById('social-links-container').innerHTML = '';
                         socialLinksCount = 0;
@@ -1082,15 +1138,27 @@
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
+                showStatus('خطأ في تحميل البيانات', 'error');
             }
         }
 
-        function logout() {
+        async function logout() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                showStatus('جاري تسجيل الخروج...', 'info');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
+                try {
+                    showStatus('جاري تسجيل الخروج...', 'info');
+                    
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Sign out from Firebase
+                    await auth.signOut();
+                    
+                    // Redirect to login page
+                    window.location.href = 'index_complete_fixed.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    showStatus('خطأ في تسجيل الخروج', 'error');
+                }
             }
         }
 
