@@ -3,391 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ملف تعريفي - Q8 Bio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>الملف التعريفي - Q8 Bio</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-        /* إطار الجوال */
-        .phone-frame {
-            width: 320px;
-            height: 640px;
-            background: #1a1a1a;
-            border-radius: 35px;
-            padding: 8px;
-            box-shadow: 
-                0 0 0 2px #333,
-                0 20px 40px rgba(0, 0, 0, 0.3);
+        
+        .phone-container {
+            width: 350px;
+            height: 600px;
+            background: #000;
+            border-radius: 30px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             position: relative;
         }
-
-        /* شاشة الجوال */
+        
         .phone-screen {
             width: 100%;
             height: 100%;
-            border-radius: 28px;
-            overflow: hidden;
-            position: relative;
             background: linear-gradient(135deg, #007bff, #0056b3);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
         }
-
-        /* طبقة تراكب للخلفيات المخصصة */
-        .phone-screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 1;
-        }
-
-        /* شريط الحالة */
+        
         .status-bar {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 44px;
-            background: rgba(0, 0, 0, 0.3);
+            top: 10px;
+            left: 20px;
+            right: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 10;
+            font-size: 12px;
+            font-weight: bold;
         }
-
-        /* محتوى البطاقة */
-        .profile-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 50px 20px 20px;
-            text-align: center;
+        
+        .time {
+            font-size: 14px;
+        }
+        
+        .battery {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .profile-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            overflow-y: auto;
-            z-index: 2;
+            justify-content: center;
+            height: 100%;
+            gap: 20px;
         }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            object-fit: cover;
-            margin-bottom: 15px;
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            color: white;
+            font-size: 60px;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
         }
-
-        .profile-avatar img {
+        
+        .avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 50%;
         }
-
-        .profile-name {
+        
+        .name {
             font-size: 24px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-
-        .profile-bio {
+        
+        .bio {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.4;
-            margin-bottom: 25px;
-            max-width: 220px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 280px;
+            margin-bottom: 30px;
         }
-
-        .profile-links {
+        
+        .social-links {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            max-width: 240px;
-            flex: 1;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            max-width: 300px;
         }
-
-        /* روابط التواصل المحسنة */
+        
         .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: white;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
             text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .social-link:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* أيقونة التطبيق المحسنة */
-        .app-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            margin-left: 10px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
             color: white;
-        }
-
-        /* ألوان التطبيقات */
-        .app-icon.instagram {
-            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
-        }
-
-        .app-icon.snapchat {
-            background: #FFFC00;
-            color: #000;
-        }
-
-        .app-icon.tiktok {
-            background: #000;
-        }
-
-        .app-icon.twitter {
-            background: #1DA1F2;
-        }
-
-        .app-icon.x {
-            background: #000;
-        }
-
-        .app-icon.facebook {
-            background: #1877F2;
-        }
-
-        .app-icon.youtube {
-            background: #FF0000;
-        }
-
-        .app-icon.github {
-            background: #333;
-        }
-
-        .app-icon.linkedin {
-            background: #0077B5;
-        }
-
-        .app-icon.telegram {
-            background: #0088CC;
-        }
-
-        .app-icon.whatsapp {
-            background: #25D366;
-        }
-
-        .app-icon.website {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .app-icon.default {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* اسم التطبيق */
-        .app-name {
-            flex: 1;
-            text-align: right;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        /* مؤشر الصفحة الرئيسية */
-        .home-indicator {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 134px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-            z-index: 10;
-        }
-
-        /* علامة Q8 Bio */
-        .brand-footer {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 10px;
-            text-align: center;
-            z-index: 3;
-        }
-
-        .brand-footer a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* شاشة التحميل */
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: white;
-            z-index: 2;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
         }
-
-        /* رسائل الخطأ */
-        .error-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: white;
-            text-align: center;
-            padding: 40px 30px;
-            z-index: 2;
+        
+        .social-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
-
-        .error-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #e74c3c;
-        }
-
+        
         .error-message {
+            text-align: center;
+            color: #ff6b6b;
             font-size: 16px;
-            font-weight: 600;
-            line-height: 1.4;
+            padding: 20px;
         }
-
-        /* تجاوب للشاشات الصغيرة */
-        @media (max-width: 360px) {
-            .phone-frame {
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        @media (max-width: 480px) {
+            .phone-container {
                 width: 300px;
-                height: 600px;
+                height: 500px;
             }
             
-            .profile-avatar {
-                width: 90px;
-                height: 90px;
+            .avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
             }
             
-            .profile-name {
+            .name {
                 font-size: 20px;
             }
             
-            .profile-bio {
-                font-size: 13px;
+            .bio {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="phone-frame">
+    <div class="phone-container">
         <div class="phone-screen" id="phone-screen">
             <div class="status-bar">
-                <div>9:41</div>
-                <div>
-                    <i class="fas fa-signal"></i>
-                    <i class="fas fa-wifi"></i>
-                    <i class="fas fa-battery-three-quarters"></i>
+                <div class="time" id="current-time">9:41</div>
+                <div class="battery">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
                 </div>
             </div>
             
-            <div id="app-container">
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">جاري التحميل...</div>
-                </div>
+            <div class="profile-content" id="profile-content">
+                <div class="loading">جاري تحميل الملف التعريفي...</div>
             </div>
-            
-            <div class="brand-footer">
-                تم إنشاؤه باستخدام <a href="https://q8.bio" target="_blank">Q8 Bio</a>
-            </div>
-            
-            <div class="home-indicator"></div>
         </div>
     </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
             authDomain: "bio-builder-new.firebaseapp.com",
@@ -399,136 +206,106 @@
         };
 
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const database = firebase.database();
 
-        // Social media platforms info
-        const socialPlatforms = {
-            'tiktok': { name: 'TikTok', icon: 'fab fa-tiktok', class: 'tiktok' },
-            'instagram': { name: 'Instagram', icon: 'fab fa-instagram', class: 'instagram' },
-            'snapchat': { name: 'Snapchat', icon: 'fab fa-snapchat-ghost', class: 'snapchat' },
-            'twitter': { name: 'Twitter', icon: 'fab fa-twitter', class: 'twitter' },
-            'facebook': { name: 'Facebook', icon: 'fab fa-facebook', class: 'facebook' },
-            'youtube': { name: 'YouTube', icon: 'fab fa-youtube', class: 'youtube' },
-            'linkedin': { name: 'LinkedIn', icon: 'fab fa-linkedin', class: 'linkedin' },
-            'website': { name: 'موقع ويب', icon: 'fas fa-globe', class: 'website' }
-        };
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-SA', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // تحديث الوقت كل ثانية
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // الحصول على اسم المستخدم من URL
+        function getUsernameFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            const username = urlParams.get('user');
+            return urlParams.get('user');
+        }
+
+        // تحميل الملف التعريفي
+        async function loadProfile() {
+            const username = getUsernameFromURL();
             
-            if (username) {
-                displayPublicProfile(username);
-            } else {
-                showError('لم يتم تحديد ملف تعريفي.');
+            if (!username) {
+                showError('لم يتم تحديد اسم المستخدم');
+                return;
             }
-        });
 
-        async function displayPublicProfile(username) {
-            const container = document.getElementById('app-container');
-            const phoneScreen = document.getElementById('phone-screen');
-            
             try {
-                const profileDoc = await db.collection('profiles').doc(username).get();
+                console.log('Loading profile for username:', username);
                 
-                if (!profileDoc.exists) {
-                    showError('الملف التعريفي غير موجود.');
-                    return;
+                // البحث في profiles أولاً
+                const profileSnapshot = await database.ref('profiles/' + username).once('value');
+                let profileData = profileSnapshot.val();
+                
+                if (!profileData) {
+                    // إذا لم نجد في profiles، نبحث في users
+                    const userSnapshot = await database.ref('users/' + username).once('value');
+                    profileData = userSnapshot.val();
                 }
-
-                const data = profileDoc.data();
                 
-                // تطبيق الخلفية
-                applyBackground(phoneScreen, data);
-                
-                // إنشاء روابط التواصل
-                let socialLinksHtml = '';
-                if (data.socialLinks && data.socialLinks.length > 0) {
-                    socialLinksHtml = data.socialLinks.map(link => {
-                        const platform = socialPlatforms[link.platform];
-                        if (platform) {
-                            return `
-                                <a href="${link.url}" target="_blank" class="social-link">
-                                    <div class="app-icon ${platform.class}">
-                                        <i class="${platform.icon}"></i>
-                                    </div>
-                                    <span class="app-name">${platform.name}</span>
-                                </a>
-                            `;
-                        }
-                        return '';
-                    }).join('');
+                if (profileData) {
+                    console.log('Profile data found:', profileData);
+                    displayProfile(profileData);
+                } else {
+                    console.log('No profile data found for username:', username);
+                    showError('الملف التعريفي غير موجود');
                 }
-
-                // إنشاء محتوى البطاقة
-                container.innerHTML = `
-                    <div class="profile-container">
-                        <div class="profile-avatar">
-                            ${data.avatar ? 
-                                `<img src="${data.avatar}" alt="الصورة الشخصية" onerror="this.parentElement.innerHTML='<i class=\\"fas fa-user\\"></i>'">` : 
-                                '<i class="fas fa-user"></i>'
-                            }
-                        </div>
-                        <h1 class="profile-name">${data.name || 'بدون اسم'}</h1>
-                        <p class="profile-bio">${data.bio || 'لا توجد نبذة تعريفية'}</p>
-                        <div class="profile-links">
-                            ${socialLinksHtml}
-                        </div>
-                    </div>
-                `;
-
             } catch (error) {
                 console.error('Error loading profile:', error);
                 showError('خطأ في تحميل الملف التعريفي');
             }
         }
 
-        function applyBackground(phoneScreen, data) {
-            // إزالة الطبقة المتراكبة إذا لم تكن هناك صورة خلفية
-            const overlay = phoneScreen.querySelector('::before');
+        // عرض الملف التعريفي
+        function displayProfile(data) {
+            const profileContent = document.getElementById('profile-content');
+            const phoneScreen = document.getElementById('phone-screen');
             
-            if (data.backgroundImage && data.backgroundImage.trim() !== '') {
-                // تطبيق صورة الخلفية
-                phoneScreen.style.backgroundImage = `url("${data.backgroundImage}")`;
-                phoneScreen.style.backgroundSize = 'cover';
-                phoneScreen.style.backgroundPosition = 'center';
+            // تحديث الخلفية
+            if (data.backgroundImage) {
+                phoneScreen.style.background = `url(${data.backgroundImage}) center/cover`;
                 phoneScreen.style.backgroundRepeat = 'no-repeat';
-                phoneScreen.style.background = 'none';
-            } else if (data.backgroundColor && data.backgroundColor.trim() !== '') {
-                // تطبيق لون الخلفية
-                const color = data.backgroundColor;
-                const darkerColor = adjustBrightness(color, -30);
-                phoneScreen.style.background = `linear-gradient(135deg, ${color}, ${darkerColor})`;
-                phoneScreen.style.backgroundImage = 'none';
-            } else {
-                // خلفية افتراضية
-                phoneScreen.style.background = 'linear-gradient(135deg, #007bff, #0056b3)';
-                phoneScreen.style.backgroundImage = 'none';
+            } else if (data.backgroundColor) {
+                phoneScreen.style.background = `linear-gradient(135deg, ${data.backgroundColor}, ${data.backgroundColor}dd)`;
             }
-        }
-
-        function showError(message) {
-            const container = document.getElementById('app-container');
-            container.innerHTML = `
-                <div class="error-container">
-                    <i class="fas fa-exclamation-triangle error-icon"></i>
-                    <div class="error-message">${message}</div>
-                </div>
+            
+            // إنشاء محتوى الملف التعريفي
+            let avatarHTML = '👤';
+            if (data.avatar) {
+                avatarHTML = `<img src="${data.avatar}" alt="Avatar" onerror="this.parentElement.innerHTML='👤'">`;
+            }
+            
+            let socialLinksHTML = '';
+            if (data.socialLinks && data.socialLinks.length > 0) {
+                socialLinksHTML = data.socialLinks.map(link => 
+                    `<a href="${link.url}" target="_blank" class="social-link">${link.name}</a>`
+                ).join('');
+            }
+            
+            profileContent.innerHTML = `
+                <div class="avatar">${avatarHTML}</div>
+                <div class="name">${data.name || 'بدون اسم'}</div>
+                <div class="bio">${data.bio || 'لا توجد نبذة تعريفية'}</div>
+                <div class="social-links">${socialLinksHTML}</div>
             `;
         }
 
-        function adjustBrightness(color, amount) {
-            const usePound = color[0] === '#';
-            const col = usePound ? color.slice(1) : color;
-            const num = parseInt(col, 16);
-            let r = (num >> 16) + amount;
-            let g = (num >> 8 & 0x00FF) + amount;
-            let b = (num & 0x0000FF) + amount;
-            r = r > 255 ? 255 : r < 0 ? 0 : r;
-            g = g > 255 ? 255 : g < 0 ? 0 : g;
-            b = b > 255 ? 255 : b < 0 ? 0 : b;
-            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+        // عرض رسالة خطأ
+        function showError(message) {
+            const profileContent = document.getElementById('profile-content');
+            profileContent.innerHTML = `<div class="error-message">${message}</div>`;
         }
+
+        // تحميل الملف التعريفي عند تحميل الصفحة
+        window.addEventListener('load', loadProfile);
     </script>
 </body>
 </html>
