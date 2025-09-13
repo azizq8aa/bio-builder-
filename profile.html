@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q8 Bio - الملف التعريفي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 32px;
+            background: #007bff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 40px 30px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .profile-bio {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.4;
+            max-width: 280px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .social-link {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .brand-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        .error-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 480px) {
+            .phone-container {
+                width: 100%;
+                max-width: 375px;
+                height: 100vh;
+                border-radius: 0;
+                padding: 0;
+            }
+            
+            .phone-screen {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen" id="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div id="current-time">9:41</div>
+                <div>📶 📶 🔋</div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <div class="loading-spinner"></div>
+                <div>جاري تحميل الملف التعريفي...</div>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-state" id="error-state">
+                <div class="error-icon">⚠️</div>
+                <div class="error-title">لم يتم العثور على الملف التعريفي</div>
+                <div class="error-message">تأكد من صحة الرابط أو تواصل مع صاحب الملف التعريفي</div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="profile-content" id="profile-content" style="display: none;">
+                <div class="profile-avatar" id="profile-avatar">👤</div>
+                <div class="profile-name" id="profile-name">مستخدم Q8 Bio</div>
+                <div class="profile-bio" id="profile-bio">مرحباً بكم في ملفي التعريفي</div>
+                <div class="social-links" id="social-links"></div>
+                
+                <div class="brand-footer">
+                    تم إنشاؤه بواسطة Q8 Bio
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
+            authDomain: "bio-builder-new.firebaseapp.com",
+            databaseURL: "https://bio-builder-new-default-rtdb.firebaseio.com",
+            projectId: "bio-builder-new",
+            storageBucket: "bio-builder-new.firebasestorage.app",
+            messagingSenderId: "618331429708",
+            appId: "1:618331429708:web:4357af8958ac90a67d0de9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // منصات التواصل الاجتماعي
+        const socialPlatforms = {
+            instagram: 'Instagram',
+            twitter: 'Twitter',
+            facebook: 'Facebook',
+            youtube: 'YouTube',
+            tiktok: 'TikTok',
+            website: 'موقع ويب'
+        };
+
+        // الحصول على اسم المستخدم من الرابط
+        function getUsernameFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('user');
+        }
+
+        // تحميل الملف التعريفي
+        async function loadProfile() {
+            const username = getUsernameFromUrl();
+            
+            if (!username) {
+                showError();
+                return;
+            }
+            
+            try {
+                const profileRef = database.ref('profiles/' + username);
+                const snapshot = await profileRef.once('value');
+                
+                if (!snapshot.exists()) {
+                    showError();
+                    return;
+                }
+                
+                const profileData = snapshot.val();
+                displayProfile(profileData);
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError();
+            }
+        }
+
+        // عرض الملف التعريفي
+        function displayProfile(data) {
+            // إخفاء شاشة التحميل
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('profile-content').style.display = 'flex';
+            
+            // تحديث عنوان الصفحة
+            document.title = `${data.name || 'مستخدم Q8 Bio'} - Q8 Bio`;
+            
+            // تعيين الخلفية
+            const phoneScreen = document.getElementById('phone-screen');
+            if (data.backgroundImage) {
+                phoneScreen.style.backgroundImage = `url("${data.backgroundImage}")`;
+            } else if (data.backgroundColor) {
+                phoneScreen.style.background = data.backgroundColor;
+            }
+            
+            // تعيين الصورة الشخصية
+            const avatar = document.getElementById('profile-avatar');
+            if (data.avatar) {
+                avatar.style.backgroundImage = `url("${data.avatar}")`;
+                avatar.textContent = '';
+            }
+            
+            // تعيين الاسم والنبذة
+            document.getElementById('profile-name').textContent = data.name || 'مستخدم Q8 Bio';
+            document.getElementById('profile-bio').textContent = data.bio || 'مرحباً بكم في ملفي التعريفي';
+            
+            // عرض الروابط الاجتماعية
+            renderSocialLinks(data.socialLinks || []);
+        }
+
+        // عرض الروابط الاجتماعية
+        function renderSocialLinks(socialLinks) {
+            const container = document.getElementById('social-links');
+            container.innerHTML = '';
+            
+            const validLinks = socialLinks.filter(link => link.url && link.url.trim() !== '');
+            
+            validLinks.forEach(link => {
+                const platformName = socialPlatforms[link.platform] || link.platform;
+                const linkElement = document.createElement('a');
+                linkElement.className = 'social-link';
+                linkElement.href = link.url.startsWith('http') ? link.url : 'https://' + link.url;
+                linkElement.target = '_blank';
+                linkElement.rel = 'noopener noreferrer';
+                linkElement.textContent = platformName;
+                container.appendChild(linkElement);
+            });
+        }
+
+        // عرض حالة الخطأ
+        function showError() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'flex';
+        }
+
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-SA', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 60000); // تحديث كل دقيقة
+            loadProfile();
+        });
+    </script>
+</body>
+</html>
