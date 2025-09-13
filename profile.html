@@ -3,239 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q8 Bio - الملف التعريفي</title>
+    <title>الملف التعريفي - Q8 Bio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-        
-        .phone-container {
-            width: 375px;
-            height: 812px;
-            background: #000;
-            border-radius: 40px;
-            padding: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            border-radius: 32px;
-            background: #007bff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+
+        .profile-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
             text-align: center;
-            color: white;
-            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            overflow: hidden;
         }
-        
-        .status-bar {
+
+        .profile-container::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 44px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            font-size: 14px;
-            font-weight: bold;
+            bottom: 0;
+            background: inherit;
+            z-index: -1;
         }
-        
+
         .profile-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            background-size: cover;
-            background-position: center;
-            border: 3px solid rgba(255,255,255,0.5);
+            margin: 0 auto 25px;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            transition: transform 0.3s ease;
         }
-        
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
         .profile-name {
             font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .profile-bio {
             font-size: 16px;
+            color: #5a6c7d;
+            line-height: 1.6;
             margin-bottom: 30px;
-            opacity: 0.9;
-            line-height: 1.4;
-            max-width: 280px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        
+
         .social-links {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            width: 100%;
-            max-width: 280px;
+            margin-bottom: 30px;
         }
-        
+
         .social-link {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 12px;
-            padding: 12px 16px;
-            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        
-        .social-link:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .brand-footer {
+
+        .social-link::before {
+            content: '';
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            opacity: 0.7;
-        }
-        
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            top: 0;
+            left: -100%;
+            width: 100%;
             height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
-        
+
+        .social-link:hover::before {
+            left: 100%;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .social-link i {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+
+        .loading-message {
+            text-align: center;
+            color: #3498db;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid white;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-right: 10px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .error-state {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
+
+        .brand-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #7f8c8d;
+            font-size: 14px;
         }
-        
-        .error-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            opacity: 0.7;
+
+        .brand-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
         }
-        
-        .error-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+
+        .brand-footer a:hover {
+            text-decoration: underline;
         }
-        
-        .error-message {
-            font-size: 16px;
-            opacity: 0.8;
-        }
-        
+
+        /* Responsive Design */
         @media (max-width: 480px) {
-            .phone-container {
-                width: 100%;
-                max-width: 375px;
-                height: 100vh;
-                border-radius: 0;
-                padding: 0;
+            .profile-container {
+                padding: 30px 20px;
+                margin: 10px;
             }
             
-            .phone-screen {
-                border-radius: 0;
+            .profile-name {
+                font-size: 24px;
+            }
+            
+            .profile-bio {
+                font-size: 15px;
             }
         }
+
+        /* Custom background styles */
+        .custom-background {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .custom-background .profile-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
     </style>
-</head>
-<body>
-    <div class="phone-container">
-        <div class="phone-screen" id="phone-screen">
-            <!-- Status Bar -->
-            <div class="status-bar">
-                <div id="current-time">9:41</div>
-                <div>📶 📶 🔋</div>
-            </div>
-
-            <!-- Loading State -->
-            <div class="loading-state" id="loading-state">
-                <div class="loading-spinner"></div>
-                <div>جاري تحميل الملف التعريفي...</div>
-            </div>
-
-            <!-- Error State -->
-            <div class="error-state" id="error-state">
-                <div class="error-icon">⚠️</div>
-                <div class="error-title">لم يتم العثور على الملف التعريفي</div>
-                <div class="error-message">تأكد من صحة الرابط أو تواصل مع صاحب الملف التعريفي</div>
-            </div>
-
-            <!-- Profile Content -->
-            <div class="profile-content" id="profile-content" style="display: none;">
-                <div class="profile-avatar" id="profile-avatar">👤</div>
-                <div class="profile-name" id="profile-name">مستخدم Q8 Bio</div>
-                <div class="profile-bio" id="profile-bio">مرحباً بكم في ملفي التعريفي</div>
-                <div class="social-links" id="social-links"></div>
-                
-                <div class="brand-footer">
-                    تم إنشاؤه بواسطة Q8 Bio
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB_JYPRWYnbAw4AvJ0yTXLfLbPNOUZG4tA",
             authDomain: "bio-builder-new.firebaseapp.com",
@@ -246,126 +222,135 @@
             appId: "1:618331429708:web:4357af8958ac90a67d0de9"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const db = firebase.firestore();
+    </script>
+</head>
+<body>
+    <div class="loading-message" id="loadingMessage">
+        <div class="loading-spinner"></div>
+        جاري تحميل الملف التعريفي...
+    </div>
 
-        // منصات التواصل الاجتماعي
-        const socialPlatforms = {
-            instagram: 'Instagram',
-            twitter: 'Twitter',
-            facebook: 'Facebook',
-            youtube: 'YouTube',
-            tiktok: 'TikTok',
-            website: 'موقع ويب'
-        };
+    <div class="profile-container" id="profileContainer" style="display: none;">
+        <img src="https://i.ibb.co/pzp61h2/khaleej1-avatar.png" alt="الصورة الشخصية" class="profile-avatar" id="profileAvatar">
+        <h1 class="profile-name" id="profileName">اسم المستخدم</h1>
+        <p class="profile-bio" id="profileBio">نبذة تعريفية</p>
+        <div class="social-links" id="socialLinks"></div>
+        
+        <div class="brand-footer">
+            تم إنشاؤه باستخدام <a href="https://azizq8aa.github.io/bio-builder-/" target="_blank">Q8 Bio</a>
+        </div>
+    </div>
 
-        // الحصول على اسم المستخدم من الرابط
-        function getUsernameFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('user');
+    <div class="error-message" id="errorMessage" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        الملف التعريفي غير موجود أو حدث خطأ في التحميل
+    </div>
+
+    <script>
+        // Get username from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('user');
+
+        if (!username) {
+            showError('لم يتم تحديد اسم المستخدم');
+        } else {
+            loadProfile(username);
         }
 
-        // تحميل الملف التعريفي
-        async function loadProfile() {
-            const username = getUsernameFromUrl();
-            
-            if (!username) {
-                showError();
-                return;
-            }
-            
+        async function loadProfile(username) {
             try {
-                const profileRef = database.ref('profiles/' + username);
-                const snapshot = await profileRef.once('value');
+                const doc = await db.collection('profiles').doc(username).get();
                 
-                if (!snapshot.exists()) {
-                    showError();
-                    return;
+                if (doc.exists) {
+                    const data = doc.data();
+                    displayProfile(data);
+                } else {
+                    showError('الملف التعريفي غير موجود');
                 }
-                
-                const profileData = snapshot.val();
-                displayProfile(profileData);
-                
             } catch (error) {
                 console.error('Error loading profile:', error);
-                showError();
+                showError('حدث خطأ في تحميل الملف التعريفي');
             }
         }
 
-        // عرض الملف التعريفي
         function displayProfile(data) {
-            // إخفاء شاشة التحميل
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('profile-content').style.display = 'flex';
+            // Hide loading message
+            document.getElementById('loadingMessage').style.display = 'none';
             
-            // تحديث عنوان الصفحة
-            document.title = `${data.name || 'مستخدم Q8 Bio'} - Q8 Bio`;
+            // Show profile container
+            const container = document.getElementById('profileContainer');
+            container.style.display = 'block';
             
-            // تعيين الخلفية
-            const phoneScreen = document.getElementById('phone-screen');
-            if (data.backgroundImage) {
-                phoneScreen.style.backgroundImage = `url("${data.backgroundImage}")`;
-            } else if (data.backgroundColor) {
-                phoneScreen.style.background = data.backgroundColor;
-            }
+            // Set profile data
+            document.getElementById('profileName').textContent = data.name || 'اسم المستخدم';
+            document.getElementById('profileBio').textContent = data.bio || 'نبذة تعريفية';
             
-            // تعيين الصورة الشخصية
-            const avatar = document.getElementById('profile-avatar');
             if (data.avatar) {
-                avatar.style.backgroundImage = `url("${data.avatar}")`;
-                avatar.textContent = '';
+                document.getElementById('profileAvatar').src = data.avatar;
             }
             
-            // تعيين الاسم والنبذة
-            document.getElementById('profile-name').textContent = data.name || 'مستخدم Q8 Bio';
-            document.getElementById('profile-bio').textContent = data.bio || 'مرحباً بكم في ملفي التعريفي';
+            // Apply background
+            if (data.backgroundColor) {
+                if (data.backgroundColor.startsWith('http')) {
+                    // Custom image background
+                    document.body.style.backgroundImage = `url(${data.backgroundColor})`;
+                    document.body.classList.add('custom-background');
+                } else {
+                    // Color background
+                    const darkerColor = adjustBrightness(data.backgroundColor, -20);
+                    document.body.style.background = `linear-gradient(135deg, ${data.backgroundColor}, ${darkerColor})`;
+                }
+            }
             
-            // عرض الروابط الاجتماعية
-            renderSocialLinks(data.socialLinks || []);
+            // Display social links
+            const socialLinksContainer = document.getElementById('socialLinks');
+            if (data.socialLinks && data.socialLinks.length > 0) {
+                data.socialLinks.forEach(link => {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = link.url;
+                    linkElement.target = '_blank';
+                    linkElement.className = 'social-link';
+                    linkElement.innerHTML = `
+                        <i class="${link.icon || 'fas fa-link'}"></i>
+                        ${getDomainName(link.url)}
+                    `;
+                    socialLinksContainer.appendChild(linkElement);
+                });
+            }
         }
 
-        // عرض الروابط الاجتماعية
-        function renderSocialLinks(socialLinks) {
-            const container = document.getElementById('social-links');
-            container.innerHTML = '';
-            
-            const validLinks = socialLinks.filter(link => link.url && link.url.trim() !== '');
-            
-            validLinks.forEach(link => {
-                const platformName = socialPlatforms[link.platform] || link.platform;
-                const linkElement = document.createElement('a');
-                linkElement.className = 'social-link';
-                linkElement.href = link.url.startsWith('http') ? link.url : 'https://' + link.url;
-                linkElement.target = '_blank';
-                linkElement.rel = 'noopener noreferrer';
-                linkElement.textContent = platformName;
-                container.appendChild(linkElement);
-            });
+        function showError(message) {
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
         }
 
-        // عرض حالة الخطأ
-        function showError() {
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('error-state').style.display = 'flex';
+        function getDomainName(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return domain.replace('www.', '');
+            } catch {
+                return 'رابط';
+            }
         }
 
-        // تحديث الوقت
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ar-SA', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
-            });
-            document.getElementById('current-time').textContent = timeString;
+        function adjustBrightness(color, amount) {
+            const usePound = color[0] === '#';
+            const col = usePound ? color.slice(1) : color;
+            const num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = (num >> 8 & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = r > 255 ? 255 : r < 0 ? 0 : r;
+            g = g > 255 ? 255 : g < 0 ? 0 : g;
+            b = b > 255 ? 255 : b < 0 ? 0 : b;
+            return (usePound ? '#' : '') + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
         }
-
-        // تهيئة الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            updateTime();
-            setInterval(updateTime, 60000); // تحديث كل دقيقة
-            loadProfile();
-        });
     </script>
 </body>
 </html>
