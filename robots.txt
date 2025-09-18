@@ -1,0 +1,25 @@
+# Robots.txt for Q8 Sites
+# Enhanced for security and SEO
+
+User-agent: *
+Allow: /
+
+# Block access to sensitive directories (if any exist in future)
+Disallow: /admin/
+Disallow: /config/
+Disallow: /.env
+Disallow: /backup/
+Disallow: /logs/
+
+# Block common attack vectors
+Disallow: /wp-admin/
+Disallow: /wp-content/
+Disallow: /wp-includes/
+Disallow: /cgi-bin/
+Disallow: /.git/
+
+# Sitemap location (update with actual sitemap when available)
+Sitemap: https://azizq8aa.github.io/Q8-site/sitemap.xml
+
+# Crawl delay to prevent aggressive crawling
+Crawl-delay: 1
