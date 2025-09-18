@@ -1,0 +1,18 @@
+Contact: mailto:security@q8sites.com
+Expires: 2026-12-31T23:59:59.000Z
+Acknowledgments: https://azizq8aa.github.io/Q8-site/
+Preferred-Languages: ar, en
+Canonical: https://azizq8aa.github.io/.well-known/security.txt
+
+# Security Policy for Q8 Sites
+# 
+# If you discover a security vulnerability, please report it responsibly.
+# We appreciate your efforts to improve the security of our services.
+#
+# Please include:
+# - Description of the vulnerability
+# - Steps to reproduce
+# - Potential impact
+# - Suggested fix (if available)
+#
+# We will respond to security reports within 48 hours.
